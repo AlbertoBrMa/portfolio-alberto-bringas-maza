@@ -1,0 +1,35 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# PAT local para scripts/fetch-projects.mjs — nunca debe commitearse
+.env
+.env.*
+!.env.example
+
+# Datos e imágenes de proyectos: se generan en build time desde el repo CMS
+# privado (scripts/fetch-projects.mjs). El repo CMS es la única fuente de
+# verdad, así que esto nunca se commitea aquí.
+src/data/projects.generated.json
+public/projects/*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --accent: #c8ff00;
+  --bg: #080810;
+}
+
+html {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ocultar cursor nativo solo en dispositivos con ratón */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
