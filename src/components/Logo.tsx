@@ -1,41 +1,62 @@
-export default function Logo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 440 220" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle id="dot" cx="28" cy="196" r="13" fill="#3B82F6" />
+type LogoProps = {
+  accent?: string;
+  foreground?: string;
+  size?: number;
+  className?: string;
+};
 
+export default function Logo({
+  accent = '#3B82F6',
+  foreground = '#FFFFFF',
+  size = 220,
+  className,
+}: LogoProps) {
+  return (
+    <svg
+      width={size}
+      height={size * 0.32}
+      viewBox="0 0 420 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      role="img"
+      aria-label=".ABM logo"
+    >
+      {/* Punto circular */}
+      <circle id="dot" cx="24" cy="60" r="12" fill={accent} />
+
+      {/* A geométrica */}
       <path
         id="letterA"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        fill="#3B82F6"
-        d="M135,15 L215,205 L55,205 Z M135,80 L170,175 L100,175 Z"
+        d="M72 98 L108 22 L144 98 L126 98 L116 74 L100 74 L90 98 Z"
+        fill={accent}
       />
 
+      {/* </> dentro de la A — color oscuro para contrastar con el azul de la A */}
       <path
         id="code"
-        fill="#3B82F6"
-        d="
-          M129,151 L119,162 L129,173 L132,170 L124,162 L132,154 Z
-          M135,173 L140,151 L143,152 L138,174 Z
-          M161,151 L171,162 L161,173 L158,170 L166,162 L158,154 Z
-        "
+        d="M96 58 L88 50 L96 42 M120 42 L128 50 L120 58 M112 36 L104 64"
+        stroke="#080810"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
 
+      {/* B blanca */}
       <path
         id="letterB"
-        fill="#FFFFFF"
-        d="
-          M225,15 L251,15 L251,205 L225,205 Z
-          M251,15 L285,15 C312,15 328,32 328,58 C328,84 312,104 285,104 L251,104 Z
-          M251,116 L290,116 C318,116 335,136 335,162 C335,188 316,205 288,205 L251,205 Z
-        "
+        d="M176 22 H212 C232 22 244 34 244 50 C244 62 236 70 224 72 C238 74 248 84 248 98 C248 116 234 120 214 120 H176 V22 Z
+           M194 38 V64 H210 C220 64 226 58 226 50 C226 42 220 38 210 38 H194 Z
+           M194 78 V104 H214 C226 104 232 98 232 90 C232 82 226 78 214 78 H194 Z"
+        fill={foreground}
       />
 
+      {/* M geométrica */}
       <path
         id="letterM"
-        fill="#3B82F6"
-        d="M345,205 L345,15 L392,115 L440,15 L440,205 L415,205 L415,65 L392,155 L370,65 L370,205 Z"
+        d="M286 98 V22 L318 58 L350 22 V98 H332 V52 L318 68 L304 52 V98 Z"
+        fill={accent}
       />
     </svg>
-  )
+  );
 }
