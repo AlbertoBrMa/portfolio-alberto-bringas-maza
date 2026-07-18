@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { projects } from '../data/projects'
@@ -13,7 +13,6 @@ const fadeUp = {
 }
 
 const VISIBLE_RADIUS = 2 // cuántas tarjetas se muestran a cada lado de la activa
-const SPACING = 200 // separación horizontal entre tarjetas, en px
 
 // Distancia circular más corta entre dos índices (con wraparound): permite que
 // el carrusel "dé la vuelta" en vez de recorrer todo el camino largo.
@@ -25,11 +24,35 @@ function circularOffset(index: number, active: number, total: number) {
   return diff
 }
 
+// Las tarjetas escalan con el ancho real del contenedor (no con el viewport
+// completo, que aquí está acotado por max-w-6xl) para que se vean grandes en
+// desktop sin desbordar en móvil.
+function useCarouselMetrics() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [containerWidth, setContainerWidth] = useState(0)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const ro = new ResizeObserver(([entry]) => setContainerWidth(entry.contentRect.width))
+    ro.observe(el)
+    setContainerWidth(el.getBoundingClientRect().width)
+    return () => ro.disconnect()
+  }, [])
+
+  const cardWidth = Math.min(480, Math.max(230, containerWidth * 0.38))
+  const spacing = cardWidth * 0.72
+  const height = Math.round((cardWidth * 9) / 16) + 90
+
+  return { ref, cardWidth, spacing, height }
+}
+
 export default function Projects() {
   const [active, setActive] = useState(0)
   const navigate = useNavigate()
   const total = projects.length
   const activeProject = projects[active]
+  const { ref: carouselRef, cardWidth, spacing, height } = useCarouselMetrics()
 
   const goTo = useCallback((i: number) => setActive(((i % total) + total) % total), [total])
   const next = useCallback(() => goTo(active + 1), [active, goTo])
@@ -72,13 +95,14 @@ export default function Projects() {
 
         {/* Carrusel con profundidad */}
         <motion.div
+          ref={carouselRef}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
           variants={fadeUp}
           custom={0.1}
-          className="relative h-85 md:h-100 mb-10 select-none"
-          style={{ perspective: 1400 }}
+          className="relative mb-10 select-none"
+          style={{ perspective: 1400, height }}
         >
           <button
             onClick={prev}
@@ -110,10 +134,10 @@ export default function Projects() {
               return (
                 <motion.article
                   key={project.slug}
-                  className="absolute left-1/2 top-1/2 w-56 md:w-64 rounded-2xl border overflow-hidden"
-                  style={{ borderColor: isActive ? 'rgba(200,255,0,0.4)' : 'rgba(255,255,255,0.08)' }}
+                  className="absolute left-1/2 top-1/2 rounded-2xl border overflow-hidden"
+                  style={{ width: cardWidth, borderColor: isActive ? 'rgba(200,255,0,0.4)' : 'rgba(255,255,255,0.08)' }}
                   animate={{
-                    x: `calc(-50% + ${offset * SPACING}px)`,
+                    x: `calc(-50% + ${offset * spacing}px)`,
                     y: '-50%',
                     scale: 1 - Math.abs(offset) * 0.16,
                     rotateY: offset * -22,
@@ -131,9 +155,9 @@ export default function Projects() {
                       ? <img src={project.preview} alt={project.title} className="w-full h-full object-cover" draggable={false} />
                       : <span className="text-white/10 text-sm font-mono">preview</span>
                     }
-                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent pt-10 pb-3 px-4">
+                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent pt-12 pb-4 px-5">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-white font-semibold text-sm truncate">{project.title}</h3>
+                        <h3 className="text-white font-semibold text-base truncate">{project.title}</h3>
                         {project.wip && <WipBadge compact />}
                       </div>
                     </div>
