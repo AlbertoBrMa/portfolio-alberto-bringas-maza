@@ -7,8 +7,6 @@ type LogoProps = {
   className?: string
 }
 
-// Trazado a mano en Figma calcando la referencia — ver conversación para el
-// diseño original. viewBox y coordenadas de paths son las exportadas tal cual.
 export default function Logo({
   accent = '#10b981',
   accentDark = '#065f46',
@@ -16,8 +14,6 @@ export default function Logo({
   className,
 }: LogoProps) {
   const { isDark } = useTheme()
-  // La B necesita contraste con el fondo de la página, no un blanco fijo:
-  // en modo claro un blanco puro sobre fondo claro sería invisible.
   const resolvedForeground = foreground ?? (isDark ? '#FFFFFF' : '#0a0a0f')
 
   return (

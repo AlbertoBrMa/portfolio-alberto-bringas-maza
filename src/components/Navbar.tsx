@@ -61,7 +61,6 @@ export default function Navbar() {
           : ''
       }`}
     >
-      {/* Barra principal */}
       <div className={`max-w-6xl mx-auto px-6 flex items-center justify-between transition-all duration-500 ${scrolled ? 'py-4' : 'py-7'}`}>
         <button
           onClick={goHome}
@@ -91,7 +90,6 @@ export default function Navbar() {
 
           <ThemeToggle className="hidden md:flex" />
 
-          {/* Hamburguesa — solo mobile */}
           <button
             onClick={() => setMobileOpen(o => !o)}
             aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
@@ -116,7 +114,6 @@ export default function Navbar() {
         </nav>
       </div>
 
-      {/* Menú móvil */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.nav

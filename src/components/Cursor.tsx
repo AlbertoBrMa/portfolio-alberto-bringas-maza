@@ -4,9 +4,6 @@ import { useTheme } from '../lib/useTheme'
 
 export default function Cursor() {
   const { isDark } = useTheme()
-  // Framer Motion necesita un color concreto para poder animar la transición
-  // (no interpola bien un var() de CSS), así que se resuelve aquí en JS según
-  // el tema activo en vez de leer --cursor-hover directamente.
   const hoverColor = isDark ? '#ffffff' : '#0a0a0f'
   const [hovering, setHovering] = useState(false)
   const [visible, setVisible]   = useState(false)
@@ -14,10 +11,6 @@ export default function Cursor() {
   const rawX = useMotionValue(-100)
   const rawY = useMotionValue(-100)
 
-  // El punto sigue al ratón real 1:1 (sin muelle) — un cursor debe sentirse
-  // instantáneo. El muelle se queda solo en el anillo, para el efecto de
-  // estela decorativa; con el punto también amortiguado, todo el cursor se
-  // sentía con retraso.
   const ringX = useSpring(rawX, { stiffness: 180, damping: 22 })
   const ringY = useSpring(rawY, { stiffness: 180, damping: 22 })
 
@@ -32,11 +25,6 @@ export default function Cursor() {
 
     const onOver = (e: MouseEvent) => {
       const target = e.target as Element
-
-      // Dentro de un iframe (p.ej. el visor de PDF del CV) no llegan eventos
-      // de mousemove al documento padre, así que el cursor personalizado se
-      // quedaría congelado en el borde. Lo ocultamos y dejamos ver el cursor
-      // nativo del propio iframe en su lugar.
       if (target.tagName === 'IFRAME') {
         setVisible(false)
         return

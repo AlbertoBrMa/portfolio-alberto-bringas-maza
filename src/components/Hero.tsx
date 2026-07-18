@@ -16,7 +16,6 @@ export default function Hero() {
   const photoScrollY = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
   const opacity  = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
-  // Mouse parallax — cada capa en un rango diferente para el falso 3D
   const spring = { stiffness: 70, damping: 22 }
 
   const blobX  = useSpring(useTransform(mouseX, [-0.5, 0.5], [-14, 14]), spring)
@@ -55,7 +54,6 @@ export default function Hero() {
     >
       <div className="max-w-6xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-        {/* ── Texto ── */}
         <motion.div style={{ y: contentY, opacity }}>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -109,7 +107,6 @@ export default function Hero() {
           </motion.a>
         </motion.div>
 
-        {/* ── Foto con falso 3D ── */}
         <motion.div
           style={{ y: photoScrollY, opacity }}
           initial={{ opacity: 0 }}
@@ -117,7 +114,6 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.4 }}
           className="relative justify-center items-end h-120 lg:h-140 hidden lg:flex"
         >
-          {/* Capa 1 — blob lima (más alejado) */}
           <motion.div
             style={{ x: blobX, y: blobY }}
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -125,19 +121,16 @@ export default function Hero() {
             <div className="w-72 h-72 rounded-full bg-[#10b981]/18 blur-[80px]" />
           </motion.div>
 
-          {/* Capa 2 — rectángulo borde inclinado */}
           <motion.div
             style={{ x: ring1X, y: ring1Y }}
             className="absolute bottom-8 left-1/2 -translate-x-1/2 w-52 h-72 rounded-3xl border border-[#10b981]/15 rotate-3 pointer-events-none"
           />
 
-          {/* Capa 3 — rectángulo borde más pequeño, inclinado otro lado */}
           <motion.div
             style={{ x: ring2X, y: ring2Y }}
             className="absolute bottom-12 left-1/2 -translate-x-1/2 w-44 h-64 rounded-2xl border border-black/10 dark:border-white/6 -rotate-2 pointer-events-none"
           />
 
-          {/* Capa 4 — foto (figura principal) */}
           {profile.heroPhoto && (
             <motion.img
               style={{ x: imgX, y: imgY }}
@@ -148,7 +141,6 @@ export default function Hero() {
             />
           )}
 
-          {/* Capa 5 — punto lima (más cerca del espectador) */}
           <motion.div
             style={{ x: dotX, y: dotY, background: 'var(--accent)' }}
             className="absolute bottom-16 right-10 w-3 h-3 rounded-full pointer-events-none"
@@ -157,7 +149,6 @@ export default function Hero() {
 
       </div>
 
-      {/* Indicador scroll */}
       <motion.div
         style={{ opacity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"

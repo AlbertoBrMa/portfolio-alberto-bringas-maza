@@ -28,9 +28,7 @@ export interface Project {
   preview?: string
 }
 
-// Datos generados en build time por scripts/fetch-content.mjs a partir del repo CMS privado.
-// No editar a mano: los cambios se sobreescriben en el siguiente `npm run fetch:content`.
-export const projects: Project[] = (generatedProjects as Project[]).map((project) => ({
+export const projects: Project[] =(generatedProjects as Project[]).map((project) => ({
   ...project,
   preview: project.preview ? withBase(project.preview) : project.preview,
   screenshots: project.screenshots?.map((shot) => ({ ...shot, src: withBase(shot.src) })),

@@ -3,25 +3,19 @@ import { useScroll, useTransform, motion } from 'framer-motion'
 export default function Background() {
   const { scrollYProgress } = useScroll()
 
-  // Tres capas de profundidad — cuanto mayor el porcentaje, más "cerca" parece
   const y1 = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
   const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '-42%'])
   const y3 = useTransform(scrollYProgress, [0, 1], ['0%', '-65%'])
 
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ zIndex: 0 }}>
-      {/* Base sólida */}
       <div className="absolute inset-0 bg-[#fafafa] dark:bg-[#080810]" />
-
-      {/* Capa 1 — blobs grandes, muy lentos. En claro el lima va más sutil:
-          con más opacidad se percibe como una mancha verdosa, no un brillo. */}
       <motion.div style={{ y: y1 }} className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[15%] left-[10%]  w-[700px] h-[700px] rounded-full bg-[#10b981]/3 dark:bg-[#10b981]/6  blur-[160px]" />
         <div className="absolute top-[60%] right-[8%]  w-[550px] h-[550px] rounded-full bg-black/5 dark:bg-white/4      blur-[130px]" />
         <div className="absolute top-[40%] left-[50%]  w-[400px] h-[400px] rounded-full bg-[#10b981]/3 dark:bg-[#10b981]/4  blur-[100px]" />
       </motion.div>
 
-      {/* Capa 2 — formas geométricas, velocidad media */}
       <motion.div style={{ y: y2 }} className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[12%]  right-[14%] w-36 h-36 rounded-full border border-black/10 dark:border-white/8" />
         <div className="absolute top-[52%]  left-[7%]   w-24 h-24 rotate-45   border border-black/10 dark:border-white/8" />
@@ -30,7 +24,6 @@ export default function Background() {
         <div className="absolute top-[68%]  left-[18%]  w-48 h-px  bg-gradient-to-r from-transparent via-[#10b981]/15 dark:via-[#10b981]/12 to-transparent -rotate-6" />
       </motion.div>
 
-      {/* Capa 3 — puntos pequeños, los más rápidos */}
       <motion.div style={{ y: y3 }} className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[22%]  right-[32%] w-3  h-3  rounded-full bg-[#10b981]/35 dark:bg-[#10b981]/30" />
         <div className="absolute top-[45%]  left-[22%]  w-2  h-2  rounded-full bg-black/25 dark:bg-white/20" />

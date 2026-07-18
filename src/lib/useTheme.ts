@@ -1,8 +1,5 @@
 import { useSyncExternalStore } from 'react'
 
-// Estado compartido respaldado por la clase .dark en <html>, no por useState:
-// así cualquier componente que use este hook (Navbar, Cursor...) se mantiene
-// sincronizado cuando otro cambia el tema, sin necesitar un Context.
 const listeners = new Set<() => void>()
 
 function getSnapshot() {

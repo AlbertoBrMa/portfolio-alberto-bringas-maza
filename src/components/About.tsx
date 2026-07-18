@@ -21,7 +21,6 @@ export default function About() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
 
-          {/* Bio + Experiencia */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -36,7 +35,6 @@ export default function About() {
               {bio}
             </p>
 
-            {/* Experiencia */}
             <div className="space-y-6 mb-12">
               {experience.map((job, i) => (
                 <motion.div
@@ -56,7 +54,6 @@ export default function About() {
               ))}
             </div>
 
-            {/* Formación */}
             <p className="text-xs font-mono tracking-[0.3em] uppercase mb-6 text-gray-500">
               Formación
             </p>
@@ -80,7 +77,6 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* Stack */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -117,7 +113,6 @@ export default function About() {
               ))}
             </div>
 
-            {/* Idiomas */}
             <div className="mt-12 pt-8 border-t border-black/9 dark:border-white/5">
               <p className="text-xs font-mono tracking-[0.3em] uppercase mb-6 text-gray-500">
                 Idiomas

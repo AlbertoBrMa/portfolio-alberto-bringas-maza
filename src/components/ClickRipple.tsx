@@ -29,7 +29,6 @@ export default function ClickRipple() {
       <AnimatePresence>
         {ripples.map(r => (
           <span key={r.id} style={{ position: 'absolute', left: r.x, top: r.y }}>
-            {/* Flash central — el "impacto" de la gota */}
             <motion.span
               className="absolute rounded-full"
               style={{
@@ -42,7 +41,6 @@ export default function ClickRipple() {
               transition={{ duration: 0.35, ease: 'easeOut' }}
             />
 
-            {/* Anillo 1 — onda inmediata */}
             <motion.span
               className="absolute rounded-full border-2"
               style={{ translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}
@@ -51,7 +49,6 @@ export default function ClickRipple() {
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
 
-            {/* Anillo 2 — onda media */}
             <motion.span
               className="absolute rounded-full border-2"
               style={{ translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}
@@ -60,7 +57,6 @@ export default function ClickRipple() {
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             />
 
-            {/* Anillo 3 — onda exterior, la que más se aleja */}
             <motion.span
               className="absolute rounded-full border"
               style={{ translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}

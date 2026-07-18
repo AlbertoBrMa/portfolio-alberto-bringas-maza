@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { profile } from '../data/profile'
 import type { ContactLink } from '../data/profile'
 import { useFullscreen } from '../lib/useFullscreen'
+import { ExpandIcon, CompressIcon } from './icons'
 
 const icons: Record<ContactLink['type'], React.ReactNode> = {
   email: (
@@ -45,8 +46,6 @@ export default function Contact() {
 
   useEffect(() => {
     if (!cvOpen) return
-    // El scroll real ocurre en <html>, no en <body> (no hay overflow/height
-    // propios en ninguno), así que hay que bloquear documentElement.
     const html = document.documentElement
     const previousOverflow = html.style.overflow
     html.style.overflow = 'hidden'
@@ -88,7 +87,6 @@ export default function Contact() {
           {profile.contact.availability}
         </motion.p>
 
-        {/* Links de contacto */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           {profile.contact.links.map(({ type, label, value, href }, i) => {
             const external = type !== 'email'
@@ -118,7 +116,6 @@ export default function Contact() {
           })}
         </div>
 
-        {/* Botones CV */}
         {profile.cv && (
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -164,7 +161,6 @@ export default function Contact() {
 
       </div>
 
-      {/* Modal previsualización CV — portal al body para escapar del stacking context */}
       {createPortal(
         <AnimatePresence>
           {cvOpen && (
@@ -176,7 +172,6 @@ export default function Contact() {
             className="fixed inset-0 z-9999 flex items-center justify-center p-4 md:p-8"
             onClick={() => setCvOpen(false)}
           >
-            {/* Backdrop */}
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
             <motion.div
@@ -189,7 +184,6 @@ export default function Contact() {
               style={cvFullscreen ? undefined : { height: 'min(85dvh, 900px)' }}
               onClick={e => e.stopPropagation()}
             >
-              {/* Header — oculto en pantalla completa, solo el PDF sin nada más */}
               {!cvFullscreen && (
                 <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/12 dark:border-white/8 shrink-0">
                   <span className="text-xs font-mono tracking-widest uppercase text-gray-500">Currículum Vitae</span>
@@ -226,7 +220,6 @@ export default function Contact() {
                 </div>
               )}
 
-              {/* En pantalla completa solo queda un botón mínimo flotante para salir */}
               {cvFullscreen && (
                 <button
                   onClick={toggleCvFullscreen}
@@ -237,7 +230,6 @@ export default function Contact() {
                 </button>
               )}
 
-              {/* iframe */}
               <iframe
                 src={profile.cv}
                 className="flex-1 w-full border-0"
@@ -250,21 +242,5 @@ export default function Contact() {
         document.body
       )}
     </footer>
-  )
-}
-
-function ExpandIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3" />
-    </svg>
-  )
-}
-
-function CompressIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 3v3a2 2 0 0 1-2 2H4M15 3v3a2 2 0 0 0 2 2h3M4 16h3a2 2 0 0 1 2 2v3M20 16h-3a2 2 0 0 0-2 2v3" />
-    </svg>
   )
 }

@@ -63,9 +63,7 @@ const emptyProfile: Profile = {
   contact: { availability: '', links: [] },
 }
 
-// Datos generados en build time por scripts/fetch-content.mjs a partir del repo
-// CMS privado. No editar a mano: se sobreescriben en el siguiente fetch.
-const merged: Profile = { ...emptyProfile, ...(generatedProfile as Partial<Profile>) }
+const merged: Profile ={ ...emptyProfile, ...(generatedProfile as Partial<Profile>) }
 
 export const profile: Profile = {
   ...merged,
