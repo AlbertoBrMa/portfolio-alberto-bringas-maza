@@ -1,4 +1,5 @@
 import generatedProfile from './profile.generated.json'
+import { withBase } from '../lib/url'
 
 export interface ExperienceEntry {
   role: string
@@ -64,4 +65,10 @@ const emptyProfile: Profile = {
 
 // Datos generados en build time por scripts/fetch-content.mjs a partir del repo
 // CMS privado. No editar a mano: se sobreescriben en el siguiente fetch.
-export const profile: Profile = { ...emptyProfile, ...(generatedProfile as Partial<Profile>) }
+const merged: Profile = { ...emptyProfile, ...(generatedProfile as Partial<Profile>) }
+
+export const profile: Profile = {
+  ...merged,
+  heroPhoto: merged.heroPhoto ? withBase(merged.heroPhoto) : merged.heroPhoto,
+  cv: merged.cv ? withBase(merged.cv) : merged.cv,
+}
