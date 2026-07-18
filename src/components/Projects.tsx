@@ -168,27 +168,6 @@ export default function Projects() {
           </motion.div>
         </motion.div>
 
-        {/* Indicadores */}
-        <div className="flex justify-center gap-2 mb-16">
-          {projects.map((project, i) => (
-            <button
-              key={project.slug}
-              onClick={() => goTo(i)}
-              aria-label={`Ir a ${project.title}`}
-              className="p-1.5 -m-1.5"
-            >
-              <span
-                className="block rounded-full transition-all"
-                style={{
-                  width: i === active ? 20 : 6,
-                  height: 6,
-                  background: i === active ? 'var(--accent)' : 'rgba(255,255,255,0.15)',
-                }}
-              />
-            </button>
-          ))}
-        </div>
-
         {/* Panel de detalle del proyecto activo */}
         <AnimatePresence mode="wait">
           <motion.div
