@@ -287,7 +287,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
     <>
       <div className="rounded-2xl border border-white/8 overflow-hidden bg-[#0d0d18] select-none">
         {/* Imagen */}
-        <div className="relative overflow-hidden cursor-zoom-in" onClick={() => setLightbox(true)}>
+        <div className="relative overflow-hidden cursor-zoom-in aspect-video" onClick={() => setLightbox(true)}>
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.img
               key={current}
@@ -299,7 +299,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
               animate="center"
               exit="exit"
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
               draggable={false}
             />
           </AnimatePresence>
