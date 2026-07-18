@@ -1,62 +1,43 @@
 type LogoProps = {
-  accent?: string;
-  foreground?: string;
-  size?: number;
-  className?: string;
-};
+  accent?: string
+  foreground?: string
+  className?: string
+}
 
-export default function Logo({
-  accent = '#3B82F6',
-  foreground = '#FFFFFF',
-  size = 220,
-  className,
-}: LogoProps) {
+// Trazado a mano en Figma calcando la referencia — ver conversación para el
+// diseño original. viewBox y coordenadas de paths son las exportadas tal cual.
+export default function Logo({ accent = '#3B82F6', foreground = '#FFFFFF', className }: LogoProps) {
   return (
-    <svg
-      width={size}
-      height={size * 0.32}
-      viewBox="0 0 420 120"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      role="img"
-      aria-label=".ABM logo"
-    >
-      {/* Punto circular */}
-      <circle id="dot" cx="24" cy="60" r="12" fill={accent} />
+    <svg viewBox="0 0 905 297" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} role="img" aria-label=".ABM logo">
+      <ellipse id="dot" cx="24" cy="271.981" rx="24" ry="25" fill={accent} />
 
-      {/* A geométrica */}
       <path
         id="letterA"
-        d="M72 98 L108 22 L144 98 L126 98 L116 74 L100 74 L90 98 Z"
         fill={accent}
+        d="M66 295.981L241 0.981049L415.5 295.981H364L241 89.981L118.099 295.981H66Z"
       />
 
-      {/* </> dentro de la A — color oscuro para contrastar con el azul de la A */}
       <path
         id="code"
-        d="M96 58 L88 50 L96 42 M120 42 L128 50 L120 58 M112 36 L104 64"
-        stroke="#080810"
-        strokeWidth="5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fill={accent}
+        d="
+          M216 223.981V233.981L187 247.481L216 261.981V270.981L177 252.981V242.981L216 223.981Z
+          M223 284.981L249 209.981H258L232 284.981H223Z
+          M304 242.981V251.981L265 270.981V261.981L294 247.481L265 233.981V223.981L304 242.981Z
+        "
       />
 
-      {/* B blanca */}
       <path
         id="letterB"
-        d="M176 22 H212 C232 22 244 34 244 50 C244 62 236 70 224 72 C238 74 248 84 248 98 C248 116 234 120 214 120 H176 V22 Z
-           M194 38 V64 H210 C220 64 226 58 226 50 C226 42 220 38 210 38 H194 Z
-           M194 78 V104 H214 C226 104 232 98 232 90 C232 82 226 78 214 78 H194 Z"
         fill={foreground}
+        d="M333 52.9813L309 10.9813H530C589 20.4811 615.227 73.4014 590 131.981L592 133.981C664.94 141.876 682.522 284.967 581.929 294.981H465L441 253.981H536H561.5C636.36 251.471 623.268 172.536 561.5 174.981H511.5H400L376 132.981H400.5H511.5C570.5 132.981 575.079 52.5646 511.5 52.9813C447.921 53.3979 333 52.9813 333 52.9813Z"
       />
 
-      {/* M geométrica */}
       <path
         id="letterM"
-        d="M286 98 V22 L318 58 L350 22 V98 H332 V52 L318 68 L304 52 V98 Z"
         fill={accent}
+        d="M634 15.981V82.981L769 219.981L857 131.981V295.981H904V15.981L769 150.981L634 15.981Z"
       />
     </svg>
-  );
+  )
 }
