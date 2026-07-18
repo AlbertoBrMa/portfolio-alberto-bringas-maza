@@ -388,63 +388,95 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className={`w-full object-contain ${isFullscreen ? 'max-h-[80dvh]' : 'max-h-[72dvh]'}`}
+                    className={`w-full object-contain ${isFullscreen ? 'max-h-[94dvh]' : 'max-h-[72dvh]'}`}
                     draggable={false}
                   />
                 </AnimatePresence>
               </div>
 
-              {/* Caption lightbox */}
-              <div className="mt-3 mb-1 min-h-10">
-                <AnimatePresence initial={false} mode="wait">
-                  <motion.p
-                    key={current}
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-gray-400 text-sm leading-relaxed text-center"
-                  >
-                    {slides[current].caption}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
+              {/* En pantalla completa se oculta todo el texto/controles: solo la
+                  imagen y unos botones mínimos flotantes para navegar/salir. */}
+              {!isFullscreen && (
+                <>
+                  {/* Caption lightbox */}
+                  <div className="mt-3 mb-1 min-h-10">
+                    <AnimatePresence initial={false} mode="wait">
+                      <motion.p
+                        key={current}
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                        className="text-gray-400 text-sm leading-relaxed text-center"
+                      >
+                        {slides[current].caption}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
 
-              <div className="flex items-center justify-between mt-3 px-1">
-                <div className="flex gap-1.5">
-                  {slides.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i) }}
-                      className="rounded-full transition-all duration-200"
-                      style={{
-                        width: i === current ? '20px' : '6px',
-                        height: '6px',
-                        background: i === current ? 'var(--accent)' : 'rgba(255,255,255,0.25)',
-                      }}
-                    />
-                  ))}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-gray-500">{current + 1} / {total}</span>
-                  <button onClick={() => go(-1)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6" /></svg>
+                  <div className="flex items-center justify-between mt-3 px-1">
+                    <div className="flex gap-1.5">
+                      {slides.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i) }}
+                          className="rounded-full transition-all duration-200"
+                          style={{
+                            width: i === current ? '20px' : '6px',
+                            height: '6px',
+                            background: i === current ? 'var(--accent)' : 'rgba(255,255,255,0.25)',
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono text-gray-500">{current + 1} / {total}</span>
+                      <button onClick={() => go(-1)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6" /></svg>
+                      </button>
+                      <button onClick={() => go(1)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6" /></svg>
+                      </button>
+                      <button
+                        onClick={toggleFullscreen}
+                        aria-label="Pantalla completa"
+                        className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+                      >
+                        <ExpandIcon />
+                      </button>
+                      <button onClick={() => setLightbox(false)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {isFullscreen && (
+                <>
+                  <button
+                    onClick={() => go(-1)}
+                    aria-label="Anterior"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6" /></svg>
                   </button>
-                  <button onClick={() => go(1)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6" /></svg>
+                  <button
+                    onClick={() => go(1)}
+                    aria-label="Siguiente"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6" /></svg>
                   </button>
                   <button
                     onClick={toggleFullscreen}
-                    aria-label={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
-                    className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+                    aria-label="Salir de pantalla completa"
+                    className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
                   >
-                    {isFullscreen ? <CompressIcon /> : <ExpandIcon />}
+                    <CompressIcon />
                   </button>
-                  <button onClick={() => setLightbox(false)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-                  </button>
-                </div>
-              </div>
+                </>
+              )}
             </motion.div>
           </motion.div>
           )}

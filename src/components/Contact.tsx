@@ -189,40 +189,53 @@ export default function Contact() {
               style={cvFullscreen ? undefined : { height: 'min(85dvh, 900px)' }}
               onClick={e => e.stopPropagation()}
             >
-              {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/8 shrink-0">
-                <span className="text-xs font-mono tracking-widest uppercase text-gray-500">Currículum Vitae</span>
-                <div className="flex items-center gap-2">
-                  <a
-                    href={profile.cv}
-                    download={`${profile.name.replace(/\s+/g, '_')}_CV.pdf`}
-                    className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full font-medium text-black"
-                    style={{ background: 'var(--accent)' }}
-                  >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                    Descargar
-                  </a>
-                  <button
-                    onClick={toggleCvFullscreen}
-                    aria-label={cvFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
-                    className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-white hover:bg-white/8 transition-colors"
-                  >
-                    {cvFullscreen ? <CompressIcon /> : <ExpandIcon />}
-                  </button>
-                  <button
-                    onClick={() => setCvOpen(false)}
-                    className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-white hover:bg-white/8 transition-colors"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                  </button>
+              {/* Header — oculto en pantalla completa, solo el PDF sin nada más */}
+              {!cvFullscreen && (
+                <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/8 shrink-0">
+                  <span className="text-xs font-mono tracking-widest uppercase text-gray-500">Currículum Vitae</span>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={profile.cv}
+                      download={`${profile.name.replace(/\s+/g, '_')}_CV.pdf`}
+                      className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full font-medium text-black"
+                      style={{ background: 'var(--accent)' }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      Descargar
+                    </a>
+                    <button
+                      onClick={toggleCvFullscreen}
+                      aria-label="Pantalla completa"
+                      className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-white hover:bg-white/8 transition-colors"
+                    >
+                      <ExpandIcon />
+                    </button>
+                    <button
+                      onClick={() => setCvOpen(false)}
+                      className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-white hover:bg-white/8 transition-colors"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* En pantalla completa solo queda un botón mínimo flotante para salir */}
+              {cvFullscreen && (
+                <button
+                  onClick={toggleCvFullscreen}
+                  aria-label="Salir de pantalla completa"
+                  className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
+                >
+                  <CompressIcon />
+                </button>
+              )}
 
               {/* iframe */}
               <iframe
