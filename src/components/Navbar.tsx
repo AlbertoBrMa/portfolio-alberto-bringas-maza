@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
+import Logo from './Logo'
 
 const links = [
   { label: 'Sobre mí',  hash: 'about' },
@@ -63,9 +64,10 @@ export default function Navbar() {
       <div className={`max-w-6xl mx-auto px-6 flex items-center justify-between transition-all duration-500 ${scrolled ? 'py-4' : 'py-7'}`}>
         <button
           onClick={goHome}
-          className="text-white font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
+          aria-label="Inicio"
+          className="hover:opacity-80 transition-opacity"
         >
-          bm<span style={{ color: 'var(--accent)' }}>.</span>
+          <Logo className="h-9 w-auto" />
         </button>
 
         <nav className="flex items-center gap-8">
