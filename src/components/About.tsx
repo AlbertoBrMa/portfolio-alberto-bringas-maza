@@ -5,7 +5,7 @@ export default function About() {
   const { experience, education, skillGroups, languages, bio } = profile
 
   return (
-    <section id="about" className="relative min-h-screen py-32 px-6 border-t border-black/5 dark:border-white/5 flex items-center" style={{ zIndex: 1 }}>
+    <section id="about" className="relative min-h-screen py-32 px-6 border-t border-black/9 dark:border-white/5 flex items-center" style={{ zIndex: 1 }}>
       <div className="max-w-6xl mx-auto">
 
         <motion.p
@@ -107,7 +107,7 @@ export default function About() {
                     {group.items.map((item) => (
                       <span
                         key={item}
-                        className="text-xs px-2.5 py-1 rounded-md border border-black/8 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors cursor-default"
+                        className="text-xs px-2.5 py-1 rounded-md border border-black/12 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors cursor-default"
                       >
                         {item}
                       </span>
@@ -118,7 +118,7 @@ export default function About() {
             </div>
 
             {/* Idiomas */}
-            <div className="mt-12 pt-8 border-t border-black/5 dark:border-white/5">
+            <div className="mt-12 pt-8 border-t border-black/9 dark:border-white/5">
               <p className="text-xs font-mono tracking-[0.3em] uppercase mb-6 text-gray-500">
                 Idiomas
               </p>

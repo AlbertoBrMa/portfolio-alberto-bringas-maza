@@ -54,7 +54,7 @@ export default function Contact() {
   }, [cvOpen])
 
   return (
-    <footer id="contact" className="relative py-32 px-6 border-t border-black/5 dark:border-white/5" style={{ zIndex: 1 }}>
+    <footer id="contact" className="relative py-32 px-6 border-t border-black/9 dark:border-white/5" style={{ zIndex: 1 }}>
       <div className="max-w-6xl mx-auto w-full">
 
         <motion.p
@@ -104,7 +104,7 @@ export default function Contact() {
                 viewport={{ once: true }}
                 variants={item}
                 whileHover={{ y: -4 }}
-                className="group flex items-start gap-4 p-5 rounded-xl border border-black/8 dark:border-white/8 hover:border-(--accent-ink) hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
+                className="group flex items-start gap-4 p-5 rounded-xl border border-black/12 dark:border-white/8 hover:border-(--accent-ink) hover:bg-black/2 dark:hover:bg-white/2 transition-colors"
               >
                 <span className="text-gray-500 group-hover:text-(--accent-ink) transition-colors mt-0.5 shrink-0">
                   {icons[type]}
@@ -156,7 +156,7 @@ export default function Contact() {
           </motion.div>
         )}
 
-        <div className="mt-16 border-t border-black/5 dark:border-white/5 pt-8">
+        <div className="mt-16 border-t border-black/9 dark:border-white/5 pt-8">
           <p className="text-gray-700 text-xs font-mono">
             © {new Date().getFullYear()} {profile.name} · React & Framer Motion
           </p>
@@ -191,7 +191,7 @@ export default function Contact() {
             >
               {/* Header — oculto en pantalla completa, solo el PDF sin nada más */}
               {!cvFullscreen && (
-                <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/8 dark:border-white/8 shrink-0">
+                <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/12 dark:border-white/8 shrink-0">
                   <span className="text-xs font-mono tracking-widest uppercase text-gray-500">Currículum Vitae</span>
                   <div className="flex items-center gap-2">
                     <a

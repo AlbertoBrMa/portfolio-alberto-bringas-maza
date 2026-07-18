@@ -80,7 +80,7 @@ export default function Projects() {
   }
 
   return (
-    <section id="projects" className="relative min-h-screen py-32 px-6 border-t border-black/5 dark:border-white/5" style={{ zIndex: 1 }}>
+    <section id="projects" className="relative min-h-screen py-32 px-6 border-t border-black/9 dark:border-white/5" style={{ zIndex: 1 }}>
       <div className="max-w-6xl mx-auto">
 
         <motion.p

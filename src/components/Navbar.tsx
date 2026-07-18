@@ -57,7 +57,7 @@ export default function Navbar() {
       transition={{ duration: 0.5, delay: 0.2 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled || mobileOpen
-          ? 'bg-white/95 dark:bg-[#080810]/95 backdrop-blur-md border-b border-black/5 dark:border-white/5'
+          ? 'bg-white/95 dark:bg-[#080810]/95 backdrop-blur-md border-b border-black/9 dark:border-white/5'
           : ''
       }`}
     >
@@ -131,7 +131,7 @@ export default function Navbar() {
                 <button
                   key={hash}
                   onClick={() => goToSection(hash)}
-                  className="text-left text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white py-3 text-base font-medium border-b border-black/5 dark:border-white/5 transition-colors"
+                  className="text-left text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white py-3 text-base font-medium border-b border-black/9 dark:border-white/5 transition-colors"
                 >
                   {label}
                 </button>

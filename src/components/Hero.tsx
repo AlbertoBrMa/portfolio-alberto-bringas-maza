@@ -134,7 +134,7 @@ export default function Hero() {
           {/* Capa 3 — rectángulo borde más pequeño, inclinado otro lado */}
           <motion.div
             style={{ x: ring2X, y: ring2Y }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-44 h-64 rounded-2xl border border-black/6 dark:border-white/6 -rotate-2 pointer-events-none"
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-44 h-64 rounded-2xl border border-black/10 dark:border-white/6 -rotate-2 pointer-events-none"
           />
 
           {/* Capa 4 — foto (figura principal) */}

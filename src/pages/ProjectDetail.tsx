@@ -114,7 +114,7 @@ export default function ProjectDetail() {
             {project.screenshots && project.screenshots.length > 0
               ? <Carousel slides={project.screenshots} title={project.title} />
               : (
-                <div className="aspect-video w-full rounded-2xl border border-black/8 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/8 via-black/2 dark:via-white/2 to-transparent flex items-center justify-center">
+                <div className="aspect-video w-full rounded-2xl border border-black/12 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/8 via-black/2 dark:via-white/2 to-transparent flex items-center justify-center">
                   <span className="text-black/10 dark:text-white/10 text-sm font-mono">screenshot</span>
                 </div>
               )
@@ -151,7 +151,7 @@ export default function ProjectDetail() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.45, delay: i * 0.07 }}
-                    className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-8 p-6 rounded-xl border border-black/8 dark:border-white/8"
+                    className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-8 p-6 rounded-xl border border-black/12 dark:border-white/8"
                   >
                     <div>
                       <p className="text-gray-900 dark:text-white font-semibold text-sm mb-3">{sg.group}</p>
@@ -186,7 +186,7 @@ export default function ProjectDetail() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="p-6 rounded-xl border border-black/8 dark:border-white/8 hover:border-(--accent-ink) transition-colors"
+                  className="p-6 rounded-xl border border-black/12 dark:border-white/8 hover:border-(--accent-ink) transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: 'var(--accent)' }} />
@@ -205,7 +205,7 @@ export default function ProjectDetail() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="mt-16 mb-0 p-8 rounded-2xl border border-black/8 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/4 via-transparent to-transparent"
+              className="mt-16 mb-0 p-8 rounded-2xl border border-black/12 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/4 via-transparent to-transparent"
             >
               <p className="text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--accent-ink)' }}>Visión</p>
               <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">{project.vision}</p>
@@ -213,7 +213,7 @@ export default function ProjectDetail() {
           )}
 
           {/* Navegación prev / next */}
-          <div className="mt-24 pt-10 border-t border-black/5 dark:border-white/5 flex justify-between gap-4">
+          <div className="mt-24 pt-10 border-t border-black/9 dark:border-white/5 flex justify-between gap-4">
             {prev ? (
               <Link to={`/project/${prev.slug}`} className="group flex items-center gap-3 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform">
@@ -287,7 +287,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
 
   return (
     <>
-      <div className="rounded-2xl border border-black/8 dark:border-white/8 overflow-hidden bg-white dark:bg-[#0d0d18] select-none">
+      <div className="rounded-2xl border border-black/12 dark:border-white/8 overflow-hidden bg-white dark:bg-[#0d0d18] select-none">
         {/* Imagen */}
         <div className="relative overflow-hidden cursor-zoom-in aspect-video" onClick={() => setLightbox(true)}>
           <AnimatePresence initial={false} custom={direction} mode="popLayout">

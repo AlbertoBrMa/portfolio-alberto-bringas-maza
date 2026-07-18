@@ -14,8 +14,13 @@
 }
 
 :root:not(.dark) {
-  --bg: #f4f4f1;
-  --accent-ink: #4d6600;
+  /* Blanco frío, no cálido/marfil: mezclado con los blobs de lima de fondo,
+     un blanco cálido leía como una mancha verdosa en vez de un brillo. */
+  --bg: #fafafa;
+  /* lime-700 de Tailwind: un verde oscuro pensado para texto, no la simple
+     versión oscurecida del lima puro (que se percibe "sucia" a igualdad de
+     saturación — es un problema del propio matiz amarillo-verde, no del %). */
+  --accent-ink: #4d7c0f;
   --cursor-hover: #0a0a0f;
 }
 
