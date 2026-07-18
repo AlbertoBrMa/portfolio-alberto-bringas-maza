@@ -1,3 +1,5 @@
+import { useTheme } from '../lib/useTheme'
+
 type LogoProps = {
   accent?: string
   accentDark?: string
@@ -10,9 +12,14 @@ type LogoProps = {
 export default function Logo({
   accent = '#c8ff00',
   accentDark = '#4d6600',
-  foreground = '#FFFFFF',
+  foreground,
   className,
 }: LogoProps) {
+  const { isDark } = useTheme()
+  // La B necesita contraste con el fondo de la página, no un blanco fijo:
+  // en modo claro un blanco puro sobre fondo claro sería invisible.
+  const resolvedForeground = foreground ?? (isDark ? '#FFFFFF' : '#0a0a0f')
+
   return (
     <svg viewBox="0 0 905 297" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} role="img" aria-label=".ABM logo">
       <defs>
@@ -42,7 +49,7 @@ export default function Logo({
 
       <path
         id="letterB"
-        fill={foreground}
+        fill={resolvedForeground}
         d="M333 52.9813L309 10.9813H530C589 20.4811 615.227 73.4014 590 131.981L592 133.981C664.94 141.876 682.522 284.967 581.929 294.981H465L441 253.981H536H561.5C636.36 251.471 623.268 172.536 561.5 174.981H511.5H400L376 132.981H400.5H511.5C570.5 132.981 575.079 52.5646 511.5 52.9813C447.921 53.3979 333 52.9813 333 52.9813Z"
       />
 
