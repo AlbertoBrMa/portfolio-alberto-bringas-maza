@@ -48,7 +48,7 @@ export default function Cursor() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-9998"
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-100000"
         style={{
           x: ringX,
           y: ringY,
@@ -67,7 +67,7 @@ export default function Cursor() {
       />
 
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-9999"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-100001"
         style={{
           x: dotX,
           y: dotY,
