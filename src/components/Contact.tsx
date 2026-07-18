@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { profile } from '../data/profile'
@@ -34,6 +34,16 @@ const item = {
 
 export default function Contact() {
   const [cvOpen, setCvOpen] = useState(false)
+
+  useEffect(() => {
+    if (!cvOpen) return
+    // El scroll real ocurre en <html>, no en <body> (no hay overflow/height
+    // propios en ninguno), así que hay que bloquear documentElement.
+    const html = document.documentElement
+    const previousOverflow = html.style.overflow
+    html.style.overflow = 'hidden'
+    return () => { html.style.overflow = previousOverflow }
+  }, [cvOpen])
 
   return (
     <footer id="contact" className="relative py-32 px-6 border-t border-white/5" style={{ zIndex: 1 }}>
