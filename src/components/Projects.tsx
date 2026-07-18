@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useCallback, useEffect, useState } from 'react'
+import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { projects } from '../data/projects'
 
@@ -11,9 +12,47 @@ const fadeUp = {
   }),
 }
 
+const VISIBLE_RADIUS = 2 // cuántas tarjetas se muestran a cada lado de la activa
+const SPACING = 200 // separación horizontal entre tarjetas, en px
+
+// Distancia circular más corta entre dos índices (con wraparound): permite que
+// el carrusel "dé la vuelta" en vez de recorrer todo el camino largo.
+function circularOffset(index: number, active: number, total: number) {
+  let diff = index - active
+  const half = total / 2
+  if (diff > half) diff -= total
+  if (diff < -half) diff += total
+  return diff
+}
+
 export default function Projects() {
-  const [featured, ...rest] = projects
+  const [active, setActive] = useState(0)
   const navigate = useNavigate()
+  const total = projects.length
+  const activeProject = projects[active]
+
+  const goTo = useCallback((i: number) => setActive(((i % total) + total) % total), [total])
+  const next = useCallback(() => goTo(active + 1), [active, goTo])
+  const prev = useCallback(() => goTo(active - 1), [active, goTo])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') next()
+      if (e.key === 'ArrowLeft') prev()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [next, prev])
+
+  const openProject = (slug: string) => {
+    sessionStorage.setItem('homeScroll', String(window.scrollY))
+    navigate(`/project/${slug}`)
+  }
+
+  const onDragEnd = (_: unknown, info: PanInfo) => {
+    if (info.offset.x < -60) next()
+    else if (info.offset.x > 60) prev()
+  }
 
   return (
     <section id="projects" className="relative min-h-screen py-32 px-6 border-t border-white/5" style={{ zIndex: 1 }}>
@@ -25,108 +64,151 @@ export default function Projects() {
           viewport={{ once: true }}
           variants={fadeUp}
           custom={0}
-          className="text-xs font-mono tracking-[0.3em] uppercase mb-20"
+          className="text-xs font-mono tracking-[0.3em] uppercase mb-16"
           style={{ color: 'var(--accent)' }}
         >
           02 — Proyectos
         </motion.p>
 
-        {/* Proyecto destacado – ancho completo */}
-        <motion.article
+        {/* Carrusel con profundidad */}
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
           variants={fadeUp}
           custom={0.1}
-          whileHover={{ y: -6, transition: { duration: 0.25 } }}
-          onClick={() => { sessionStorage.setItem('homeScroll', String(window.scrollY)); navigate(`/project/${featured.slug}`) }}
-          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sessionStorage.setItem('homeScroll', String(window.scrollY)); navigate(`/project/${featured.slug}`) } }}
-          tabIndex={0}
-          role="button"
-          className="group relative border border-white/8 rounded-2xl p-8 md:p-12 mb-6 overflow-hidden hover:border-[#c8ff00]/20 focus-visible:border-[#c8ff00]/40 focus-visible:outline-none transition-colors cursor-pointer"
+          className="relative h-85 md:h-100 mb-10 select-none"
+          style={{ perspective: 1400 }}
         >
+          <button
+            onClick={prev}
+            aria-label="Proyecto anterior"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/10 text-gray-400 hover:border-[#c8ff00]/40 hover:text-[#c8ff00] transition-colors flex items-center justify-center"
+          >
+            ‹
+          </button>
+          <button
+            onClick={next}
+            aria-label="Siguiente proyecto"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/10 text-gray-400 hover:border-[#c8ff00]/40 hover:text-[#c8ff00] transition-colors flex items-center justify-center"
+          >
+            ›
+          </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <h3 className="text-2xl md:text-3xl font-bold text-white">{featured.title}</h3>
-                {featured.wip && <WipBadge />}
-              </div>
-              <p className="text-gray-400 leading-relaxed mb-7 text-base">{featured.description}</p>
-              <div className="flex flex-wrap gap-2 mb-8">
-                {featured.tags.map(tag => (
-                  <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-white/10 text-gray-300">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="flex gap-4 flex-wrap">
-                <ProjectLink href={featured.github} type="github" />
-                <ProjectLink href={featured.live} type="live" />
-              </div>
-            </div>
+          <motion.div
+            className="absolute inset-0 cursor-grab active:cursor-grabbing"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            onDragEnd={onDragEnd}
+          >
+            {projects.map((project, i) => {
+              const offset = circularOffset(i, active, total)
+              if (Math.abs(offset) > VISIBLE_RADIUS) return null
+              const isActive = offset === 0
 
-            <div className="relative z-10 aspect-video rounded-xl border border-white/8 overflow-hidden bg-linear-to-br from-[#c8ff00]/8 via-white/3 to-transparent flex items-center justify-center">
-              {featured.preview
-                ? <img src={featured.preview} alt={featured.title} className="w-full h-full object-cover" />
-                : <span className="text-white/10 text-sm font-mono">preview</span>
-              }
-            </div>
-          </div>
-        </motion.article>
+              return (
+                <motion.article
+                  key={project.slug}
+                  className="absolute left-1/2 top-1/2 w-56 md:w-64 rounded-2xl border overflow-hidden"
+                  style={{ borderColor: isActive ? 'rgba(200,255,0,0.4)' : 'rgba(255,255,255,0.08)' }}
+                  animate={{
+                    x: `calc(-50% + ${offset * SPACING}px)`,
+                    y: '-50%',
+                    scale: 1 - Math.abs(offset) * 0.16,
+                    rotateY: offset * -22,
+                    opacity: 1 - Math.abs(offset) * 0.32,
+                    zIndex: 10 - Math.abs(offset),
+                  }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 30 }}
+                  onClick={() => (isActive ? openProject(project.slug) : goTo(i))}
+                  role="button"
+                  tabIndex={isActive ? 0 : -1}
+                  aria-label={isActive ? `Abrir ${project.title}` : `Mostrar ${project.title}`}
+                >
+                  <div className="relative aspect-video bg-linear-to-br from-[#c8ff00]/8 via-white/3 to-transparent flex items-center justify-center pointer-events-none">
+                    {project.preview
+                      ? <img src={project.preview} alt={project.title} className="w-full h-full object-cover" draggable={false} />
+                      : <span className="text-white/10 text-sm font-mono">preview</span>
+                    }
+                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent pt-10 pb-3 px-4">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-white font-semibold text-sm truncate">{project.title}</h3>
+                        {project.wip && <WipBadge compact />}
+                      </div>
+                    </div>
+                  </div>
+                </motion.article>
+              )
+            })}
+          </motion.div>
+        </motion.div>
 
-        {/* Grid 2 columnas para el resto */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {rest.map((project, i) => (
-            <motion.article
-              key={project.title}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-60px' }}
-              variants={fadeUp}
-              custom={i * 0.1 + 0.15}
-              whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              onClick={() => { sessionStorage.setItem('homeScroll', String(window.scrollY)); navigate(`/project/${project.slug}`) }}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sessionStorage.setItem('homeScroll', String(window.scrollY)); navigate(`/project/${project.slug}`) } }}
-              tabIndex={0}
-              role="button"
-              className="group relative border border-white/8 rounded-2xl p-8 flex flex-col overflow-hidden hover:border-[#c8ff00]/20 focus-visible:border-[#c8ff00]/40 focus-visible:outline-none transition-colors cursor-pointer"
+        {/* Indicadores */}
+        <div className="flex justify-center gap-2 mb-16">
+          {projects.map((project, i) => (
+            <button
+              key={project.slug}
+              onClick={() => goTo(i)}
+              aria-label={`Ir a ${project.title}`}
+              className="p-1.5 -m-1.5"
             >
-
-              <span className="absolute top-5 right-7 text-7xl font-bold leading-none select-none text-white/3 group-hover:text-white/6 transition-colors">
-                {String(i + 2).padStart(2, '0')}
-              </span>
-
-              <div className="flex items-center gap-2.5 mb-3 relative z-10">
-                <h3 className="text-xl font-bold text-white">{project.title}</h3>
-                {project.wip && <WipBadge />}
-              </div>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-1 relative z-10">{project.description}</p>
-
-              <div className="flex flex-wrap gap-2 mb-7 relative z-10">
-                {project.tags.map(tag => (
-                  <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-white/10 text-gray-300">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex gap-4 flex-wrap relative z-10">
-                <ProjectLink href={project.github} type="github" />
-                <ProjectLink href={project.live} type="live" />
-              </div>
-            </motion.article>
+              <span
+                className="block rounded-full transition-all"
+                style={{
+                  width: i === active ? 20 : 6,
+                  height: 6,
+                  background: i === active ? 'var(--accent)' : 'rgba(255,255,255,0.15)',
+                }}
+              />
+            </button>
           ))}
         </div>
+
+        {/* Panel de detalle del proyecto activo */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeProject.slug}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-2xl mx-auto text-center"
+          >
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <h3 className="text-2xl md:text-3xl font-bold text-white">{activeProject.title}</h3>
+              {activeProject.wip && <WipBadge />}
+            </div>
+            <p className="text-gray-400 leading-relaxed mb-7 text-base">{activeProject.description}</p>
+            <div className="flex flex-wrap justify-center gap-2 mb-8">
+              {activeProject.tags.map(tag => (
+                <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-white/10 text-gray-300">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="flex gap-6 flex-wrap justify-center items-center">
+              <ProjectLink href={activeProject.github} type="github" />
+              <ProjectLink href={activeProject.live} type="live" />
+              <button
+                onClick={() => openProject(activeProject.slug)}
+                className="text-sm font-semibold px-6 py-2.5 rounded-full text-black hover:scale-105 active:scale-95 transition-transform"
+                style={{ background: 'var(--accent)' }}
+              >
+                Ver proyecto →
+              </button>
+            </div>
+          </motion.div>
+        </AnimatePresence>
 
       </div>
     </section>
   )
 }
 
-function WipBadge() {
+function WipBadge({ compact = false }: { compact?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-[10px] font-mono tracking-widest uppercase px-2 py-0.5 rounded-full border border-amber-400/30 text-amber-400/80 bg-amber-400/5">
+    <span className={`inline-flex items-center gap-1.5 font-mono tracking-widest uppercase rounded-full border border-amber-400/30 text-amber-400/80 bg-amber-400/5 shrink-0 ${compact ? 'text-[8px] px-1.5 py-0.5' : 'text-[10px] px-2 py-0.5'}`}>
       <span className="w-1 h-1 rounded-full bg-amber-400 animate-pulse" />
       WIP
     </span>
