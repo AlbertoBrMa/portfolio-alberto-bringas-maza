@@ -1,29 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
 export default function Cursor() {
   const [hovering, setHovering] = useState(false)
   const [visible, setVisible]   = useState(false)
-  const rafRef = useRef<number>(0)
 
   const rawX = useMotionValue(-100)
   const rawY = useMotionValue(-100)
 
-  const dotX  = useSpring(rawX, { stiffness: 1000, damping: 50 })
-  const dotY  = useSpring(rawY, { stiffness: 1000, damping: 50 })
-  const ringX = useSpring(rawX, { stiffness: 180,  damping: 22 })
-  const ringY = useSpring(rawY, { stiffness: 180,  damping: 22 })
+  // El punto sigue al ratón real 1:1 (sin muelle) — un cursor debe sentirse
+  // instantáneo. El muelle se queda solo en el anillo, para el efecto de
+  // estela decorativa; con el punto también amortiguado, todo el cursor se
+  // sentía con retraso.
+  const ringX = useSpring(rawX, { stiffness: 180, damping: 22 })
+  const ringY = useSpring(rawY, { stiffness: 180, damping: 22 })
 
   useEffect(() => {
     if (!window.matchMedia('(pointer: fine)').matches) return
 
     const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(rafRef.current)
-      rafRef.current = requestAnimationFrame(() => {
-        rawX.set(e.clientX)
-        rawY.set(e.clientY)
-        if (!visible) setVisible(true)
-      })
+      rawX.set(e.clientX)
+      rawY.set(e.clientY)
+      if (!visible) setVisible(true)
     }
 
     const onOver = (e: MouseEvent) => {
@@ -52,7 +50,6 @@ export default function Cursor() {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseover', onOver)
       document.documentElement.removeEventListener('mouseleave', onLeave)
-      cancelAnimationFrame(rafRef.current)
     }
   }, [rawX, rawY, visible])
 
@@ -80,8 +77,8 @@ export default function Cursor() {
       <motion.div
         className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-100001"
         style={{
-          x: dotX,
-          y: dotY,
+          x: rawX,
+          y: rawY,
           translateX: '-50%',
           translateY: '-50%',
         }}
