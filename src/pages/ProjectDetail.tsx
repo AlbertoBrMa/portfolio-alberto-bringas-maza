@@ -259,6 +259,16 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
     return () => window.removeEventListener('keydown', onKey)
   }, [lightbox, go])
 
+  useEffect(() => {
+    if (!lightbox) return
+    // El scroll real ocurre en <html>, no en <body> (no hay overflow/height
+    // propios en ninguno), así que hay que bloquear documentElement.
+    const html = document.documentElement
+    const previousOverflow = html.style.overflow
+    html.style.overflow = 'hidden'
+    return () => { html.style.overflow = previousOverflow }
+  }, [lightbox])
+
   const variants = {
     enter:  (d: number) => ({ x: d > 0 ? '60%' : '-60%', opacity: 0 }),
     center: { x: 0, opacity: 1 },
