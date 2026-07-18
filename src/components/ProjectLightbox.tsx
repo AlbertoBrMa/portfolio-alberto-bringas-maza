@@ -70,10 +70,10 @@ export default function ProjectLightbox({ open, slides, title, current, directio
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.93, opacity: 0 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative bg-white dark:bg-[#080810] ${isFullscreen ? 'w-screen h-screen flex flex-col justify-center px-6' : 'max-w-6xl w-full'}`}
+            className={`relative bg-white dark:bg-[#080810] ${isFullscreen ? 'fixed inset-0 flex flex-col justify-center px-6' : 'max-w-6xl w-full'}`}
             onClick={e => e.stopPropagation()}
           >
-            <div className="relative overflow-hidden rounded-xl">
+            <div className="relative overflow-hidden rounded-xl flex justify-center">
               <AnimatePresence initial={false} custom={direction} mode="popLayout">
                 <motion.img
                   key={current}
@@ -85,7 +85,7 @@ export default function ProjectLightbox({ open, slides, title, current, directio
                   animate="center"
                   exit="exit"
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  className={`w-full object-contain ${isFullscreen ? 'max-h-[94dvh]' : 'max-h-[72dvh]'}`}
+                  className={`max-w-full object-contain ${isFullscreen ? 'max-h-[94dvh]' : 'max-h-[72dvh]'}`}
                   draggable={false}
                 />
               </AnimatePresence>
