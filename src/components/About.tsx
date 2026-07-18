@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion'
 import { profile } from '../data/profile'
+import { useLanguage, loc } from '../lib/useLanguage'
+import { useT } from '../lib/translations'
 
 export default function About() {
-  const { experience, education, skillGroups, languages, bio } = profile
+  const { experience, education, skillGroups, languages, bio, bio_en } = profile
+  const { lang } = useLanguage()
+  const t = useT()
 
   return (
     <section id="about" className="relative min-h-screen py-32 px-6 border-t border-black/9 dark:border-white/5 flex items-center" style={{ zIndex: 1 }}>
@@ -16,7 +20,7 @@ export default function About() {
           className="text-xs font-mono tracking-[0.3em] uppercase mb-20"
           style={{ color: 'var(--accent-ink)' }}
         >
-          01 — Sobre mí
+          {t('aboutEyebrow')}
         </motion.p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
@@ -28,11 +32,11 @@ export default function About() {
             transition={{ duration: 0.7 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-8 tracking-tight">
-              Me encanta construir y seguir aprendiendo
+              {t('aboutHeading')}
             </h2>
 
             <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-12">
-              {bio}
+              {loc(bio, bio_en, lang)}
             </p>
 
             <div className="space-y-6 mb-12">
@@ -47,15 +51,15 @@ export default function About() {
                 >
                   <div className="mt-1.5 w-2 h-2 rounded-full shrink-0" style={{ background: 'var(--accent)' }} />
                   <div>
-                    <p className="text-gray-900 dark:text-white font-semibold">{job.role}</p>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{job.company} · {job.period}</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">{loc(job.role, job.role_en, lang)}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{job.company} · {loc(job.period, job.period_en, lang)}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
 
             <p className="text-xs font-mono tracking-[0.3em] uppercase mb-6 text-gray-500">
-              Formación
+              {t('aboutEducation')}
             </p>
             <div className="space-y-6">
               {education.map((item, i) => (
@@ -69,8 +73,8 @@ export default function About() {
                 >
                   <div className="mt-1.5 w-2 h-2 rounded-full shrink-0 border border-black/20 dark:border-white/20" />
                   <div>
-                    <p className="text-gray-900 dark:text-white font-semibold text-sm">{item.title}</p>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">{item.center} · {item.period}</p>
+                    <p className="text-gray-900 dark:text-white font-semibold text-sm">{loc(item.title, item.title_en, lang)}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{item.center} · {loc(item.period, item.period_en, lang)}</p>
                   </div>
                 </motion.div>
               ))}
@@ -84,7 +88,7 @@ export default function About() {
             transition={{ duration: 0.7, delay: 0.15 }}
           >
             <p className="text-xs font-mono tracking-[0.3em] uppercase mb-8 text-gray-500">
-              Stack técnico
+              {t('aboutStack')}
             </p>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-7">
@@ -97,7 +101,7 @@ export default function About() {
                   transition={{ duration: 0.4, delay: 0.1 + i * 0.07 }}
                 >
                   <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-gray-600 mb-2">
-                    {group.category}
+                    {loc(group.category, group.category_en, lang)}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {group.items.map((item) => (
@@ -115,13 +119,13 @@ export default function About() {
 
             <div className="mt-12 pt-8 border-t border-black/9 dark:border-white/5">
               <p className="text-xs font-mono tracking-[0.3em] uppercase mb-6 text-gray-500">
-                Idiomas
+                {t('aboutLanguages')}
               </p>
               <div className="flex gap-8">
-                {languages.map((lang) => (
-                  <div key={lang.name}>
-                    <p className="text-gray-900 dark:text-white font-semibold text-sm">{lang.name}</p>
-                    <p className="text-gray-500 text-xs mt-0.5">{lang.level}</p>
+                {languages.map((entry) => (
+                  <div key={entry.name}>
+                    <p className="text-gray-900 dark:text-white font-semibold text-sm">{loc(entry.name, entry.name_en, lang)}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">{loc(entry.level, entry.level_en, lang)}</p>
                   </div>
                 ))}
               </div>

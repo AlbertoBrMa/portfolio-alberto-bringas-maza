@@ -3,24 +3,31 @@ import { withBase } from '../lib/url'
 
 export interface ExperienceEntry {
   role: string
+  role_en?: string
   company: string
   period: string
+  period_en?: string
 }
 
 export interface EducationEntry {
   title: string
+  title_en?: string
   center: string
   period: string
+  period_en?: string
 }
 
 export interface SkillGroup {
   category: string
+  category_en?: string
   items: string[]
 }
 
 export interface LanguageEntry {
   name: string
+  name_en?: string
   level: string
+  level_en?: string
 }
 
 export interface ContactLink {
@@ -35,8 +42,10 @@ export interface Profile {
   firstName: string
   lastName: string
   tagline: string
+  tagline_en?: string
   location: string
   bio: string
+  bio_en?: string
   heroPhoto?: string
   cv?: string
   experience: ExperienceEntry[]
@@ -45,6 +54,7 @@ export interface Profile {
   languages: LanguageEntry[]
   contact: {
     availability: string
+    availability_en?: string
     links: ContactLink[]
   }
 }
@@ -63,7 +73,7 @@ const emptyProfile: Profile = {
   contact: { availability: '', links: [] },
 }
 
-const merged: Profile ={ ...emptyProfile, ...(generatedProfile as Partial<Profile>) }
+const merged: Profile = { ...emptyProfile, ...(generatedProfile as Partial<Profile>) }
 
 export const profile: Profile = {
   ...merged,

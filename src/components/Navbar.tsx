@@ -3,17 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Logo from './Logo'
 import ThemeToggle from './ThemeToggle'
-
-const links = [
-  { label: 'Sobre mí',  hash: 'about' },
-  { label: 'Proyectos', hash: 'projects' },
-]
+import LanguageToggle from './LanguageToggle'
+import { useT } from '../lib/translations'
 
 export default function Navbar() {
   const [scrolled,    setScrolled]    = useState(false)
   const [mobileOpen,  setMobileOpen]  = useState(false)
   const navigate  = useNavigate()
   const location  = useLocation()
+  const t = useT()
+
+  const links = [
+    { label: t('navAbout'),    hash: 'about' },
+    { label: t('navProjects'), hash: 'projects' },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -64,7 +67,7 @@ export default function Navbar() {
       <div className={`max-w-6xl mx-auto px-6 flex items-center justify-between transition-all duration-500 ${scrolled ? 'py-4' : 'py-7'}`}>
         <button
           onClick={goHome}
-          aria-label="Inicio"
+          aria-label={t('navHome')}
           className="hover:opacity-80 transition-opacity"
         >
           <Logo className="h-7 w-auto" />
@@ -85,14 +88,15 @@ export default function Navbar() {
             onClick={() => goToSection('contact')}
             className="text-sm font-medium px-4 py-1.5 rounded-full border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors hidden md:block"
           >
-            Contacto
+            {t('navContact')}
           </button>
 
+          <LanguageToggle className="hidden md:flex" />
           <ThemeToggle className="hidden md:flex" />
 
           <button
             onClick={() => setMobileOpen(o => !o)}
-            aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={mobileOpen ? t('navMenuClose') : t('navMenuOpen')}
             className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.25"
           >
             <motion.span
@@ -138,8 +142,9 @@ export default function Navbar() {
                   onClick={() => goToSection('contact')}
                   className="text-sm font-medium px-5 py-2.5 rounded-full border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors w-fit"
                 >
-                  Contacto
+                  {t('navContact')}
                 </button>
+                <LanguageToggle />
                 <ThemeToggle />
               </div>
             </div>

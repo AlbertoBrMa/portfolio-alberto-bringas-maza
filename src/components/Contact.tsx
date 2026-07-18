@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { profile } from '../data/profile'
 import type { ContactLink } from '../data/profile'
-import { useFullscreen } from '../lib/useFullscreen'
-import { ExpandIcon, CompressIcon } from './icons'
+import { useLanguage, loc } from '../lib/useLanguage'
+import { useT } from '../lib/translations'
+import CvModal from './CvModal'
 
 const icons: Record<ContactLink['type'], React.ReactNode> = {
   email: (
@@ -36,21 +36,9 @@ const item = {
 
 export default function Contact() {
   const [cvOpen, setCvOpen] = useState(false)
-  const cvModalRef = useRef<HTMLDivElement>(null)
-  const { isFullscreen: cvFullscreen, toggle: toggleCvFullscreen } = useFullscreen(cvModalRef)
-
-  useEffect(() => {
-    if (cvOpen || document.fullscreenElement !== cvModalRef.current) return
-    document.exitFullscreen().catch(() => {})
-  }, [cvOpen])
-
-  useEffect(() => {
-    if (!cvOpen) return
-    const html = document.documentElement
-    const previousOverflow = html.style.overflow
-    html.style.overflow = 'hidden'
-    return () => { html.style.overflow = previousOverflow }
-  }, [cvOpen])
+  const { lang } = useLanguage()
+  const t = useT()
+  const downloadName = `${profile.name.replace(/\s+/g, '_')}_CV.pdf`
 
   return (
     <footer id="contact" className="relative py-32 px-6 border-t border-black/9 dark:border-white/5" style={{ zIndex: 1 }}>
@@ -64,7 +52,7 @@ export default function Contact() {
           className="text-xs font-mono tracking-[0.3em] uppercase mb-10"
           style={{ color: 'var(--accent-ink)' }}
         >
-          03 — Contacto
+          {t('contactEyebrow')}
         </motion.p>
 
         <motion.h2
@@ -74,7 +62,7 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.05 }}
           className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white tracking-tight mb-4"
         >
-          ¿Hablamos?
+          {t('contactHeading')}
         </motion.h2>
 
         <motion.p
@@ -84,7 +72,7 @@ export default function Contact() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-gray-600 dark:text-gray-400 text-lg mb-14 max-w-md"
         >
-          {profile.contact.availability}
+          {loc(profile.contact.availability, profile.contact.availability_en, lang)}
         </motion.p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -126,7 +114,7 @@ export default function Contact() {
           >
             <a
               href={profile.cv}
-              download={`${profile.name.replace(/\s+/g, '_')}_CV.pdf`}
+              download={downloadName}
               className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full font-semibold text-sm text-black hover:scale-105 active:scale-95"
               style={{ background: 'var(--accent)', transition: 'background 0.2s, transform 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.background = '#059669')}
@@ -137,7 +125,7 @@ export default function Contact() {
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Descargar CV
+              {t('contactDownloadCv')}
             </a>
 
             <button
@@ -148,7 +136,7 @@ export default function Contact() {
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
-              Ver CV
+              {t('contactViewCv')}
             </button>
           </motion.div>
         )}
@@ -161,85 +149,8 @@ export default function Contact() {
 
       </div>
 
-      {createPortal(
-        <AnimatePresence>
-          {cvOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-9999 flex items-center justify-center p-4 md:p-8"
-            onClick={() => setCvOpen(false)}
-          >
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
-
-            <motion.div
-              ref={cvModalRef}
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 16 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative flex flex-col border border-black/10 dark:border-white/10 overflow-hidden bg-white dark:bg-[#0d0d18] ${cvFullscreen ? 'w-screen h-screen rounded-none' : 'w-full max-w-3xl rounded-2xl'}`}
-              style={cvFullscreen ? undefined : { height: 'min(85dvh, 900px)' }}
-              onClick={e => e.stopPropagation()}
-            >
-              {!cvFullscreen && (
-                <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/12 dark:border-white/8 shrink-0">
-                  <span className="text-xs font-mono tracking-widest uppercase text-gray-500">Currículum Vitae</span>
-                  <div className="flex items-center gap-2">
-                    <a
-                      href={profile.cv}
-                      download={`${profile.name.replace(/\s+/g, '_')}_CV.pdf`}
-                      className="inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full font-medium text-black"
-                      style={{ background: 'var(--accent)' }}
-                    >
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="7 10 12 15 17 10" />
-                        <line x1="12" y1="15" x2="12" y2="3" />
-                      </svg>
-                      Descargar
-                    </a>
-                    <button
-                      onClick={toggleCvFullscreen}
-                      aria-label="Pantalla completa"
-                      className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-black/8 dark:hover:bg-white/8 transition-colors"
-                    >
-                      <ExpandIcon />
-                    </button>
-                    <button
-                      onClick={() => setCvOpen(false)}
-                      className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-black/8 dark:hover:bg-white/8 transition-colors"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {cvFullscreen && (
-                <button
-                  onClick={toggleCvFullscreen}
-                  aria-label="Salir de pantalla completa"
-                  className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
-                >
-                  <CompressIcon />
-                </button>
-              )}
-
-              <iframe
-                src={profile.cv}
-                className="flex-1 w-full border-0"
-                title={`CV ${profile.name}`}
-              />
-            </motion.div>
-          </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
+      {profile.cv && (
+        <CvModal open={cvOpen} onClose={() => setCvOpen(false)} cvUrl={profile.cv} downloadName={downloadName} title={profile.name} />
       )}
     </footer>
   )

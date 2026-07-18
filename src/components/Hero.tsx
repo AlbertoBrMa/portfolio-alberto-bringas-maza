@@ -1,9 +1,13 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import { profile } from '../data/profile'
+import { useLanguage, loc } from '../lib/useLanguage'
+import { useT } from '../lib/translations'
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null)
+  const { lang } = useLanguage()
+  const t = useT()
   const mouseX  = useMotionValue(0)
   const mouseY  = useMotionValue(0)
 
@@ -62,7 +66,7 @@ export default function Hero() {
             className="text-xs font-mono tracking-[0.35em] uppercase mb-5"
             style={{ color: 'var(--accent-ink)' }}
           >
-            Hola, soy
+            {t('heroGreeting')}
           </motion.p>
 
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-5 leading-none tracking-tight">
@@ -90,7 +94,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.65 }}
             className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-10 font-light tracking-wide"
           >
-            {profile.tagline}
+            {loc(profile.tagline, profile.tagline_en, lang)}
           </motion.p>
 
           <motion.a
@@ -103,7 +107,7 @@ export default function Hero() {
             onMouseEnter={e => (e.currentTarget.style.background = '#059669')}
             onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent)')}
           >
-            Ver trabajo →
+            {t('heroCta')}
           </motion.a>
         </motion.div>
 

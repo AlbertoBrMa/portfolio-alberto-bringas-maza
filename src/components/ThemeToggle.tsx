@@ -1,12 +1,14 @@
 import { useTheme } from '../lib/useTheme'
+import { useT } from '../lib/translations'
 
 export default function ThemeToggle({ className = '' }: { className?: string }) {
   const { isDark, toggle } = useTheme()
+  const t = useT()
 
   return (
     <button
       onClick={toggle}
-      aria-label={isDark ? 'Activar modo claro' : 'Activar modo oscuro'}
+      aria-label={isDark ? t('themeToLight') : t('themeToDark')}
       className={`w-8 h-8 flex items-center justify-center rounded-full border border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-black/30 dark:hover:border-white/30 transition-colors ${className}`}
     >
       {isDark ? (

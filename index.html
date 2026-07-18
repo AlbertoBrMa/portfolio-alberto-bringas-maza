@@ -3,14 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      // Bloqueante a propósito: decide el tema antes del primer pintado, para
-      // no ver un parpadeo al cargar. Si el usuario ya eligió tema a mano
-      // (localStorage), se respeta esa elección; si no, se sigue la
+      // Bloqueante a propósito: decide tema e idioma antes del primer
+      // pintado, para no ver un parpadeo al cargar. Si el usuario ya eligió
+      // a mano (localStorage), se respeta esa elección; si no, se sigue la
       // preferencia del navegador/sistema.
       ;(function () {
-        var saved = localStorage.getItem('theme')
-        var isDark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+        var savedTheme = localStorage.getItem('theme')
+        var isDark = savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
         document.documentElement.classList.toggle('dark', isDark)
+
+        var savedLang = localStorage.getItem('lang')
+        var lang = savedLang === 'es' || savedLang === 'en'
+          ? savedLang
+          : (navigator.language || '').toLowerCase().indexOf('en') === 0 ? 'en' : 'es'
+        document.documentElement.lang = lang
       })()
     </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

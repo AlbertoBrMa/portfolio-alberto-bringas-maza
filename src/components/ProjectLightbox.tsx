@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useFullscreen } from '../lib/useFullscreen'
 import { useTheme } from '../lib/useTheme'
 import { slideVariants } from '../lib/motionVariants'
+import { useT } from '../lib/translations'
 import { ExpandIcon, CompressIcon } from './icons'
 
 interface Slide { src: string; caption: string }
@@ -22,6 +23,7 @@ interface Props {
 
 export default function ProjectLightbox({ open, slides, title, current, direction, onGoTo, onPrev, onNext, onClose }: Props) {
   const { isDark } = useTheme()
+  const t = useT()
   const total = slides.length
   const ref = useRef<HTMLDivElement>(null)
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(ref)
@@ -131,7 +133,7 @@ export default function ProjectLightbox({ open, slides, title, current, directio
                     </button>
                     <button
                       onClick={toggleFullscreen}
-                      aria-label="Pantalla completa"
+                      aria-label={t('galleryFullscreen')}
                       className="w-8 h-8 rounded-full border border-black/15 dark:border-white/15 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
                     >
                       <ExpandIcon />
@@ -148,21 +150,21 @@ export default function ProjectLightbox({ open, slides, title, current, directio
               <>
                 <button
                   onClick={onPrev}
-                  aria-label="Anterior"
+                  aria-label={t('galleryPrev')}
                   className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6" /></svg>
                 </button>
                 <button
                   onClick={onNext}
-                  aria-label="Siguiente"
+                  aria-label={t('galleryNext')}
                   className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6" /></svg>
                 </button>
                 <button
                   onClick={toggleFullscreen}
-                  aria-label="Salir de pantalla completa"
+                  aria-label={t('galleryExitFullscreen')}
                   className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/70 transition-colors"
                 >
                   <CompressIcon />

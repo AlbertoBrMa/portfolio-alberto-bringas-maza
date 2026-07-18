@@ -3,6 +3,8 @@ import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { projects } from '../data/projects'
 import { useTheme } from '../lib/useTheme'
+import { useLanguage, loc } from '../lib/useLanguage'
+import { useT } from '../lib/translations'
 import { GithubIcon, ExternalIcon, WipBadge } from './icons'
 
 const fadeUp = {
@@ -46,6 +48,8 @@ function useCarouselMetrics() {
 
 export default function Projects() {
   const { isDark } = useTheme()
+  const { lang } = useLanguage()
+  const t = useT()
   const [active, setActive] = useState(0)
   const navigate = useNavigate()
   const total = projects.length
@@ -88,7 +92,7 @@ export default function Projects() {
           className="text-xs font-mono tracking-[0.3em] uppercase mb-16"
           style={{ color: 'var(--accent-ink)' }}
         >
-          02 — Proyectos
+          {t('projectsEyebrow')}
         </motion.p>
 
         <motion.div
@@ -103,14 +107,14 @@ export default function Projects() {
         >
           <button
             onClick={prev}
-            aria-label="Proyecto anterior"
+            aria-label={t('projectsPrev')}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors flex items-center justify-center"
           >
             ‹
           </button>
           <button
             onClick={next}
-            aria-label="Siguiente proyecto"
+            aria-label={t('projectsNext')}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors flex items-center justify-center"
           >
             ›
@@ -150,16 +154,16 @@ export default function Projects() {
                   onClick={() => (isActive ? openProject(project.slug) : goTo(i))}
                   role="button"
                   tabIndex={isActive ? 0 : -1}
-                  aria-label={isActive ? `Abrir ${project.title}` : `Mostrar ${project.title}`}
+                  aria-label={`${isActive ? t('projectsOpenAria') : t('projectsShowAria')} ${loc(project.title, project.title_en, lang)}`}
                 >
                   <div className="relative aspect-video bg-linear-to-br from-[#10b981]/8 via-black/3 dark:via-white/3 to-transparent flex items-center justify-center pointer-events-none">
                     {project.preview
-                      ? <img src={project.preview} alt={project.title} className="w-full h-full object-cover" draggable={false} />
+                      ? <img src={project.preview} alt={loc(project.title, project.title_en, lang)} className="w-full h-full object-cover" draggable={false} />
                       : <span className="text-black/10 dark:text-white/10 text-sm font-mono">preview</span>
                     }
                     <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent pt-12 pb-4 px-5">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-white font-semibold text-base truncate">{project.title}</h3>
+                        <h3 className="text-white font-semibold text-base truncate">{loc(project.title, project.title_en, lang)}</h3>
                         {project.wip && <WipBadge size="xs" />}
                       </div>
                     </div>
@@ -180,10 +184,10 @@ export default function Projects() {
             className="max-w-2xl mx-auto text-center"
           >
             <div className="flex items-center justify-center gap-3 mb-4">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{activeProject.title}</h3>
-              {activeProject.wip && <WipBadge />}
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{loc(activeProject.title, activeProject.title_en, lang)}</h3>
+              {activeProject.wip && <WipBadge label={t('projectsWip')} />}
             </div>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-7 text-base">{activeProject.description}</p>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-7 text-base">{loc(activeProject.description, activeProject.description_en, lang)}</p>
             <div className="flex flex-wrap justify-center gap-2 mb-8">
               {activeProject.tags.map(tag => (
                 <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300">
@@ -199,7 +203,7 @@ export default function Projects() {
                 className="text-sm font-semibold px-6 py-2.5 rounded-full text-black hover:scale-105 active:scale-95 transition-transform"
                 style={{ background: 'var(--accent)' }}
               >
-                Ver proyecto →
+                {t('projectsCta')}
               </button>
             </div>
           </motion.div>
