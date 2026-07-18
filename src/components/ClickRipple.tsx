@@ -28,21 +28,46 @@ export default function ClickRipple() {
     <div className="fixed inset-0 pointer-events-none z-9990 overflow-hidden">
       <AnimatePresence>
         {ripples.map(r => (
-          <span key={r.id}>
+          <span key={r.id} style={{ position: 'absolute', left: r.x, top: r.y }}>
+            {/* Flash central — el "impacto" de la gota */}
             <motion.span
-              className="absolute rounded-full border"
-              style={{ left: r.x, top: r.y, translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}
-              initial={{ width: 0, height: 0, opacity: 0.45, borderWidth: 1.5 }}
-              animate={{ width: 260, height: 260, opacity: 0, borderWidth: 0.5 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              onAnimationComplete={() => remove(r.id)}
+              className="absolute rounded-full"
+              style={{
+                translateX: '-50%',
+                translateY: '-50%',
+                background: 'radial-gradient(circle, var(--accent) 0%, transparent 70%)',
+              }}
+              initial={{ width: 0, height: 0, opacity: 0.9 }}
+              animate={{ width: 90, height: 90, opacity: 0 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
             />
+
+            {/* Anillo 1 — onda inmediata */}
+            <motion.span
+              className="absolute rounded-full border-2"
+              style={{ translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}
+              initial={{ width: 0, height: 0, opacity: 0.9 }}
+              animate={{ width: 160, height: 160, opacity: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            />
+
+            {/* Anillo 2 — onda media */}
+            <motion.span
+              className="absolute rounded-full border-2"
+              style={{ translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}
+              initial={{ width: 0, height: 0, opacity: 0.7 }}
+              animate={{ width: 280, height: 280, opacity: 0 }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            />
+
+            {/* Anillo 3 — onda exterior, la que más se aleja */}
             <motion.span
               className="absolute rounded-full border"
-              style={{ left: r.x, top: r.y, translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}
-              initial={{ width: 0, height: 0, opacity: 0.3, borderWidth: 1.5 }}
-              animate={{ width: 140, height: 140, opacity: 0, borderWidth: 0.5 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+              style={{ translateX: '-50%', translateY: '-50%', borderColor: 'var(--accent)' }}
+              initial={{ width: 0, height: 0, opacity: 0.5 }}
+              animate={{ width: 420, height: 420, opacity: 0 }}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
+              onAnimationComplete={() => remove(r.id)}
             />
           </span>
         ))}
