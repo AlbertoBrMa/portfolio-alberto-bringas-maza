@@ -95,7 +95,7 @@ export default function ProjectDetail() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm text-black font-semibold hover:scale-105 active:scale-95"
                   style={{ background: 'var(--accent)', transition: 'background 0.2s, transform 0.15s' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#9dcc00')}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#059669')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent)')}
                 >
                   <ExternalIcon /> Ver live
@@ -114,7 +114,7 @@ export default function ProjectDetail() {
             {project.screenshots && project.screenshots.length > 0
               ? <Carousel slides={project.screenshots} title={project.title} />
               : (
-                <div className="aspect-video w-full rounded-2xl border border-black/12 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/8 via-black/2 dark:via-white/2 to-transparent flex items-center justify-center">
+                <div className="aspect-video w-full rounded-2xl border border-black/12 dark:border-white/8 bg-linear-to-br from-[#10b981]/8 via-black/2 dark:via-white/2 to-transparent flex items-center justify-center">
                   <span className="text-black/10 dark:text-white/10 text-sm font-mono">screenshot</span>
                 </div>
               )
@@ -205,7 +205,7 @@ export default function ProjectDetail() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="mt-16 mb-0 p-8 rounded-2xl border border-black/12 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/4 via-transparent to-transparent"
+              className="mt-16 mb-0 p-8 rounded-2xl border border-black/12 dark:border-white/8 bg-linear-to-br from-[#10b981]/4 via-transparent to-transparent"
             >
               <p className="text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--accent-ink)' }}>Visión</p>
               <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">{project.vision}</p>

@@ -10,8 +10,8 @@ type LogoProps = {
 // Trazado a mano en Figma calcando la referencia — ver conversación para el
 // diseño original. viewBox y coordenadas de paths son las exportadas tal cual.
 export default function Logo({
-  accent = '#c8ff00',
-  accentDark = '#4d6600',
+  accent = '#10b981',
+  accentDark = '#065f46',
   foreground,
   className,
 }: LogoProps) {

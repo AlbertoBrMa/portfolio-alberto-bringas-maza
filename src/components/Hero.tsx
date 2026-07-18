@@ -102,7 +102,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.85 }}
             className="inline-block px-8 py-3.5 rounded-full font-semibold text-sm tracking-wider text-black cursor-pointer hover:scale-105 active:scale-95"
             style={{ background: 'var(--accent)', transition: 'background 0.2s, transform 0.15s' }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#9dcc00')}
+            onMouseEnter={e => (e.currentTarget.style.background = '#059669')}
             onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent)')}
           >
             Ver trabajo →
@@ -122,13 +122,13 @@ export default function Hero() {
             style={{ x: blobX, y: blobY }}
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
-            <div className="w-72 h-72 rounded-full bg-[#c8ff00]/18 blur-[80px]" />
+            <div className="w-72 h-72 rounded-full bg-[#10b981]/18 blur-[80px]" />
           </motion.div>
 
           {/* Capa 2 — rectángulo borde inclinado */}
           <motion.div
             style={{ x: ring1X, y: ring1Y }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 w-52 h-72 rounded-3xl border border-[#c8ff00]/15 rotate-3 pointer-events-none"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 w-52 h-72 rounded-3xl border border-[#10b981]/15 rotate-3 pointer-events-none"
           />
 
           {/* Capa 3 — rectángulo borde más pequeño, inclinado otro lado */}

@@ -75,7 +75,7 @@ export default function Cursor() {
           width:       hovering ? 52 : 34,
           height:      hovering ? 52 : 34,
           opacity:     visible  ? 1  : 0,
-          borderColor: hovering ? hoverColor : '#c8ff00',
+          borderColor: hovering ? hoverColor : '#10b981',
         }}
         transition={{ duration: 0.2 }}
       />
@@ -90,7 +90,7 @@ export default function Cursor() {
         }}
         animate={{
           opacity:         visible  ? 1 : 0,
-          backgroundColor: hovering ? hoverColor : '#c8ff00',
+          backgroundColor: hovering ? hoverColor : '#10b981',
         }}
         transition={{ duration: 0.2 }}
       />

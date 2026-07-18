@@ -132,7 +132,7 @@ export default function Contact() {
               download={`${profile.name.replace(/\s+/g, '_')}_CV.pdf`}
               className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full font-semibold text-sm text-black hover:scale-105 active:scale-95"
               style={{ background: 'var(--accent)', transition: 'background 0.2s, transform 0.15s' }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#9dcc00')}
+              onMouseEnter={e => (e.currentTarget.style.background = '#059669')}
               onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent)')}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

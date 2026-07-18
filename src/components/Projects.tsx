@@ -116,7 +116,7 @@ export default function Projects() {
           <button
             onClick={next}
             aria-label="Siguiente proyecto"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/10 text-gray-400 hover:border-[#c8ff00]/40 hover:text-[#c8ff00] transition-colors flex items-center justify-center"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/10 text-gray-400 hover:border-[#10b981]/40 hover:text-[#10b981] transition-colors flex items-center justify-center"
           >
             ›
           </button>
@@ -157,7 +157,7 @@ export default function Projects() {
                   tabIndex={isActive ? 0 : -1}
                   aria-label={isActive ? `Abrir ${project.title}` : `Mostrar ${project.title}`}
                 >
-                  <div className="relative aspect-video bg-linear-to-br from-[#c8ff00]/8 via-black/3 dark:via-white/3 to-transparent flex items-center justify-center pointer-events-none">
+                  <div className="relative aspect-video bg-linear-to-br from-[#10b981]/8 via-black/3 dark:via-white/3 to-transparent flex items-center justify-center pointer-events-none">
                     {project.preview
                       ? <img src={project.preview} alt={project.title} className="w-full h-full object-cover" draggable={false} />
                       : <span className="text-black/10 dark:text-white/10 text-sm font-mono">preview</span>

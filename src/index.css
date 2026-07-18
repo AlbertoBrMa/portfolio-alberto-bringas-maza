@@ -5,22 +5,21 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --accent: #c8ff00;
+  --accent: #10b981;
   /* Versión del acento pensada para texto: en oscuro es igual al acento, en
-     claro el lima puro no tiene contraste suficiente sobre blanco. */
-  --accent-ink: #c8ff00;
+     claro el esmeralda puro no tiene contraste suficiente sobre blanco. */
+  --accent-ink: #10b981;
   --bg: #080810;
   --cursor-hover: #ffffff;
 }
 
 :root:not(.dark) {
-  /* Blanco frío, no cálido/marfil: mezclado con los blobs de lima de fondo,
-     un blanco cálido leía como una mancha verdosa en vez de un brillo. */
+  /* Blanco frío, no cálido/marfil: con tonos cálidos los blobs de acento se
+     percibían como una mancha en vez de un brillo. */
   --bg: #fafafa;
-  /* lime-700 de Tailwind: un verde oscuro pensado para texto, no la simple
-     versión oscurecida del lima puro (que se percibe "sucia" a igualdad de
-     saturación — es un problema del propio matiz amarillo-verde, no del %). */
-  --accent-ink: #4d7c0f;
+  /* emerald-700 de Tailwind: mismo tono que --accent pero oscurecido para
+     tener contraste suficiente como texto sobre fondo claro. */
+  --accent-ink: #047857;
   --cursor-hover: #0a0a0f;
 }
 
