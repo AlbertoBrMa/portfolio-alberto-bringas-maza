@@ -12,16 +12,20 @@ dist
 dist-ssr
 *.local
 
-# PAT local para scripts/fetch-projects.mjs — nunca debe commitearse
+# PAT local para scripts/fetch-content.mjs — nunca debe commitearse
 .env
 .env.*
 !.env.example
 
-# Datos e imágenes de proyectos: se generan en build time desde el repo CMS
-# privado (scripts/fetch-projects.mjs). El repo CMS es la única fuente de
-# verdad, así que esto nunca se commitea aquí.
+# Datos, imágenes y ficheros de contenido (proyectos y perfil): se generan en
+# build time desde el repo CMS privado (scripts/fetch-content.mjs). El repo
+# CMS es la única fuente de verdad, así que esto nunca se commitea aquí.
 src/data/projects.generated.json
+src/data/profile.generated.json
 public/projects/*
+public/profile/*
+public/.fetch-manifest.json
+public/cv.pdf
 
 # Editor directories and files
 .vscode/*

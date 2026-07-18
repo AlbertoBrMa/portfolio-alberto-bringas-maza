@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "predev": "node scripts/fetch-projects.mjs",
+    "predev": "node scripts/fetch-content.mjs",
     "build": "tsc -b && vite build",
-    "prebuild": "node scripts/fetch-projects.mjs",
-    "fetch:projects": "node scripts/fetch-projects.mjs",
+    "prebuild": "node scripts/fetch-content.mjs",
+    "fetch:content": "node scripts/fetch-content.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

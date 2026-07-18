@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { profile } from '../data/profile'
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -67,7 +68,7 @@ export default function Hero() {
           </motion.p>
 
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-5 leading-none tracking-tight">
-            {['Alberto', 'Bringas Maza'].map((word, i) => (
+            {[profile.firstName, profile.lastName].map((word, i) => (
               <div key={word} className="overflow-hidden">
                 <motion.span
                   className="block"
@@ -91,7 +92,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.65 }}
             className="text-base md:text-lg text-gray-400 mb-10 font-light tracking-wide"
           >
-            Desarrollador de Software · React · Python · IA & Datos
+            {profile.tagline}
           </motion.p>
 
           <motion.a
@@ -137,13 +138,15 @@ export default function Hero() {
           />
 
           {/* Capa 4 — foto (figura principal) */}
-          <motion.img
-            style={{ x: imgX, y: imgY }}
-            src="/me.png"
-            alt="Alberto Bringas Maza"
-            className="relative h-full w-auto max-w-xs object-contain object-bottom drop-shadow-2xl select-none pointer-events-none"
-            draggable={false}
-          />
+          {profile.heroPhoto && (
+            <motion.img
+              style={{ x: imgX, y: imgY }}
+              src={profile.heroPhoto}
+              alt={profile.name}
+              className="relative h-full w-auto max-w-xs object-contain object-bottom drop-shadow-2xl select-none pointer-events-none"
+              draggable={false}
+            />
+          )}
 
           {/* Capa 5 — punto lima (más cerca del espectador) */}
           <motion.div

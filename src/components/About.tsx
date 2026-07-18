@@ -1,47 +1,9 @@
 import { motion } from 'framer-motion'
-
-const skillGroups = [
-  { category: 'Lenguajes',        items: ['Java', 'Python', 'JavaScript', 'Kotlin'] },
-  { category: 'Frameworks',       items: ['React', 'Springboot', 'Falcon'] },
-  { category: 'ORM',              items: ['Hibernate', 'SQLAlchemy'] },
-  { category: 'Bases de datos',   items: ['PostgreSQL', 'MySQL', 'MongoDB', 'ORACLE'] },
-  { category: 'Geolocalización',  items: ['Cesium', 'Leaflet', 'GeoJSON', '3D Tiles'] },
-  { category: 'IA & Datos',       items: ['Pandas', 'Scikit-Learn'] },
-  { category: 'Herramientas',     items: ['Git', 'Docker', 'VSC', 'Netbeans'] },
-]
-
-const experience = [
-  {
-    role: 'Desarrollador de Software Junior',
-    company: 'GeoAI Analytics',
-    period: 'Marzo 2025 – Actualidad',
-  },
-  {
-    role: 'Desarrollador de Software Junior',
-    company: 'Digiburn (Erasmus+)',
-    period: 'Marzo 2024 – Junio 2024',
-  },
-]
-
-const education = [
-  {
-    title: 'Especialización en Inteligencia Artificial y Big Data',
-    center: 'IES Ataulfo Argenta',
-    period: '2025 – Actualidad',
-  },
-  {
-    title: 'CFGS Desarrollo de Aplicaciones Multiplataforma',
-    center: 'IES Ataulfo Argenta',
-    period: '2024 – 2025',
-  },
-  {
-    title: 'CFGS Desarrollo de Aplicaciones Web',
-    center: 'IES Ataulfo Argenta',
-    period: '2022 – 2024',
-  },
-]
+import { profile } from '../data/profile'
 
 export default function About() {
+  const { experience, education, skillGroups, languages, bio } = profile
+
   return (
     <section id="about" className="relative min-h-screen py-32 px-6 border-t border-white/5 flex items-center" style={{ zIndex: 1 }}>
       <div className="max-w-6xl mx-auto">
@@ -71,10 +33,7 @@ export default function About() {
             </h2>
 
             <p className="text-gray-400 text-lg leading-relaxed mb-12">
-              Joven desarrollador de Colindres, Cantabria. Me especializo en aplicaciones web y
-              geoespaciales, combinando frontend con React, backend con Python y Java, y una
-              creciente especialización en IA y Big Data. Actualmente trabajando en GeoAI Analytics
-              y cursando la especialización en IA.
+              {bio}
             </p>
 
             {/* Experiencia */}
@@ -164,14 +123,12 @@ export default function About() {
                 Idiomas
               </p>
               <div className="flex gap-8">
-                <div>
-                  <p className="text-white font-semibold text-sm">Castellano</p>
-                  <p className="text-gray-500 text-xs mt-0.5">Nativo</p>
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-sm">Inglés</p>
-                  <p className="text-gray-500 text-xs mt-0.5">Intermedio-alto</p>
-                </div>
+                {languages.map((lang) => (
+                  <div key={lang.name}>
+                    <p className="text-white font-semibold text-sm">{lang.name}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">{lang.level}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>

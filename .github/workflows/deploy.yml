@@ -32,16 +32,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Restore cached project images
+      - name: Restore cached CMS assets
         uses: actions/cache@v4
         with:
-          path: public/projects
+          path: |
+            public/projects
+            public/profile
+            public/.fetch-manifest.json
           key: cms-assets-${{ github.run_id }}
           restore-keys: |
             cms-assets-
 
-      - name: Fetch project data & images from private CMS repo
-        run: npm run fetch:projects
+      - name: Fetch content (profile + projects) from private CMS repo
+        run: npm run fetch:content
         env:
           CMS_REPO_TOKEN: ${{ secrets.CMS_REPO_TOKEN }}
           CMS_REPO_OWNER: AlbertoBrMa
