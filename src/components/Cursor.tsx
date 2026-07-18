@@ -27,7 +27,18 @@ export default function Cursor() {
     }
 
     const onOver = (e: MouseEvent) => {
-      const el = (e.target as Element).closest('a, button, [data-cursor]')
+      const target = e.target as Element
+
+      // Dentro de un iframe (p.ej. el visor de PDF del CV) no llegan eventos
+      // de mousemove al documento padre, así que el cursor personalizado se
+      // quedaría congelado en el borde. Lo ocultamos y dejamos ver el cursor
+      // nativo del propio iframe en su lugar.
+      if (target.tagName === 'IFRAME') {
+        setVisible(false)
+        return
+      }
+
+      const el = target.closest('a, button, [data-cursor]')
       setHovering(!!el)
     }
 
