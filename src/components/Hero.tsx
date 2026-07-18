@@ -62,12 +62,12 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="text-xs font-mono tracking-[0.35em] uppercase mb-5"
-            style={{ color: 'var(--accent)' }}
+            style={{ color: 'var(--accent-ink)' }}
           >
             Hola, soy
           </motion.p>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-5 leading-none tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-5 leading-none tracking-tight">
             {[profile.firstName, profile.lastName].map((word, i) => (
               <div key={word} className="overflow-hidden">
                 <motion.span
@@ -90,7 +90,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.65 }}
-            className="text-base md:text-lg text-gray-400 mb-10 font-light tracking-wide"
+            className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-10 font-light tracking-wide"
           >
             {profile.tagline}
           </motion.p>
@@ -134,7 +134,7 @@ export default function Hero() {
           {/* Capa 3 — rectángulo borde más pequeño, inclinado otro lado */}
           <motion.div
             style={{ x: ring2X, y: ring2Y }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-44 h-64 rounded-2xl border border-white/6 -rotate-2 pointer-events-none"
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-44 h-64 rounded-2xl border border-black/6 dark:border-white/6 -rotate-2 pointer-events-none"
           />
 
           {/* Capa 4 — foto (figura principal) */}
@@ -162,7 +162,7 @@ export default function Hero() {
         style={{ opacity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-gray-600 text-[10px] tracking-[0.3em] uppercase font-mono">Scroll</span>
+        <span className="text-gray-500 dark:text-gray-600 text-[10px] tracking-[0.3em] uppercase font-mono">Scroll</span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}

@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { useTheme } from '../lib/useTheme'
 
 export default function Cursor() {
+  const { isDark } = useTheme()
+  // Framer Motion necesita un color concreto para poder animar la transición
+  // (no interpola bien un var() de CSS), así que se resuelve aquí en JS según
+  // el tema activo en vez de leer --cursor-hover directamente.
+  const hoverColor = isDark ? '#ffffff' : '#0a0a0f'
   const [hovering, setHovering] = useState(false)
   const [visible, setVisible]   = useState(false)
 
@@ -69,7 +75,7 @@ export default function Cursor() {
           width:       hovering ? 52 : 34,
           height:      hovering ? 52 : 34,
           opacity:     visible  ? 1  : 0,
-          borderColor: hovering ? '#ffffff' : '#c8ff00',
+          borderColor: hovering ? hoverColor : '#c8ff00',
         }}
         transition={{ duration: 0.2 }}
       />
@@ -84,7 +90,7 @@ export default function Cursor() {
         }}
         animate={{
           opacity:         visible  ? 1 : 0,
-          backgroundColor: hovering ? '#ffffff' : '#c8ff00',
+          backgroundColor: hovering ? hoverColor : '#c8ff00',
         }}
         transition={{ duration: 0.2 }}
       />

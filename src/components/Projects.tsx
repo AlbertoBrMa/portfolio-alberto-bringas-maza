@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { projects } from '../data/projects'
+import { useTheme } from '../lib/useTheme'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -48,6 +49,7 @@ function useCarouselMetrics() {
 }
 
 export default function Projects() {
+  const { isDark } = useTheme()
   const [active, setActive] = useState(0)
   const navigate = useNavigate()
   const total = projects.length
@@ -78,7 +80,7 @@ export default function Projects() {
   }
 
   return (
-    <section id="projects" className="relative min-h-screen py-32 px-6 border-t border-white/5" style={{ zIndex: 1 }}>
+    <section id="projects" className="relative min-h-screen py-32 px-6 border-t border-black/5 dark:border-white/5" style={{ zIndex: 1 }}>
       <div className="max-w-6xl mx-auto">
 
         <motion.p
@@ -88,7 +90,7 @@ export default function Projects() {
           variants={fadeUp}
           custom={0}
           className="text-xs font-mono tracking-[0.3em] uppercase mb-16"
-          style={{ color: 'var(--accent)' }}
+          style={{ color: 'var(--accent-ink)' }}
         >
           02 — Proyectos
         </motion.p>
@@ -107,7 +109,7 @@ export default function Projects() {
           <button
             onClick={prev}
             aria-label="Proyecto anterior"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/10 text-gray-400 hover:border-[#c8ff00]/40 hover:text-[#c8ff00] transition-colors flex items-center justify-center"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors flex items-center justify-center"
           >
             ‹
           </button>
@@ -135,7 +137,12 @@ export default function Projects() {
                 <motion.article
                   key={project.slug}
                   className="absolute left-1/2 top-1/2 rounded-2xl border overflow-hidden"
-                  style={{ width: cardWidth, borderColor: isActive ? 'rgba(200,255,0,0.4)' : 'rgba(255,255,255,0.08)' }}
+                  style={{
+                    width: cardWidth,
+                    borderColor: isActive
+                      ? 'rgba(200,255,0,0.4)'
+                      : isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+                  }}
                   animate={{
                     x: `calc(-50% + ${offset * spacing}px)`,
                     y: '-50%',
@@ -150,10 +157,10 @@ export default function Projects() {
                   tabIndex={isActive ? 0 : -1}
                   aria-label={isActive ? `Abrir ${project.title}` : `Mostrar ${project.title}`}
                 >
-                  <div className="relative aspect-video bg-linear-to-br from-[#c8ff00]/8 via-white/3 to-transparent flex items-center justify-center pointer-events-none">
+                  <div className="relative aspect-video bg-linear-to-br from-[#c8ff00]/8 via-black/3 dark:via-white/3 to-transparent flex items-center justify-center pointer-events-none">
                     {project.preview
                       ? <img src={project.preview} alt={project.title} className="w-full h-full object-cover" draggable={false} />
-                      : <span className="text-white/10 text-sm font-mono">preview</span>
+                      : <span className="text-black/10 dark:text-white/10 text-sm font-mono">preview</span>
                     }
                     <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent pt-12 pb-4 px-5">
                       <div className="flex items-center gap-2">
@@ -179,13 +186,13 @@ export default function Projects() {
             className="max-w-2xl mx-auto text-center"
           >
             <div className="flex items-center justify-center gap-3 mb-4">
-              <h3 className="text-2xl md:text-3xl font-bold text-white">{activeProject.title}</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{activeProject.title}</h3>
               {activeProject.wip && <WipBadge />}
             </div>
-            <p className="text-gray-400 leading-relaxed mb-7 text-base">{activeProject.description}</p>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-7 text-base">{activeProject.description}</p>
             <div className="flex flex-wrap justify-center gap-2 mb-8">
               {activeProject.tags.map(tag => (
-                <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-white/10 text-gray-300">
+                <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300">
                   {tag}
                 </span>
               ))}
@@ -227,7 +234,9 @@ function ProjectLink({ href, type }: { href: string; type: 'github' | 'live' }) 
       rel="noopener noreferrer"
       onClick={e => e.stopPropagation()}
       className={`flex items-center gap-2 text-sm transition-colors ${
-        type === 'live' ? 'text-[#c8ff00] hover:text-white' : 'text-gray-400 hover:text-white'
+        type === 'live'
+          ? 'text-(--accent-ink) hover:text-gray-900 dark:hover:text-white'
+          : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
       }`}
     >
       {type === 'github' ? <GithubIcon /> : <ExternalIcon />}

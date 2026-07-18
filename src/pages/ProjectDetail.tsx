@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar'
 import Cursor from '../components/Cursor'
 import ScrollProgress from '../components/ScrollProgress'
 import { useFullscreen } from '../lib/useFullscreen'
+import { useTheme } from '../lib/useTheme'
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -40,7 +41,7 @@ export default function ProjectDetail() {
           >
             <button
               onClick={() => navigate('/')}
-              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors mb-12 group"
+              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors mb-12 group"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform">
                 <path d="m15 18-6-6 6-6" />
@@ -55,11 +56,11 @@ export default function ProjectDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <p className="text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--accent)' }}>
+            <p className="text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--accent-ink)' }}>
               {String(index + 1).padStart(2, '0')} — Proyecto
             </p>
             <div className="flex items-center gap-4 mb-6 flex-wrap">
-              <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-none">
+              <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white tracking-tight leading-none">
                 {project.title}
               </h1>
               {project.wip && (
@@ -72,7 +73,7 @@ export default function ProjectDetail() {
 
             <div className="flex flex-wrap gap-2 mb-8">
               {project.tags.map(tag => (
-                <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-white/10 text-gray-400">
+                <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400">
                   {tag}
                 </span>
               ))}
@@ -83,7 +84,7 @@ export default function ProjectDetail() {
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 text-sm text-gray-300 hover:text-white hover:border-white/30 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/10 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-black/30 dark:hover:border-white/30 transition-colors"
               >
                 <GithubIcon /> GitHub
               </a>
@@ -113,8 +114,8 @@ export default function ProjectDetail() {
             {project.screenshots && project.screenshots.length > 0
               ? <Carousel slides={project.screenshots} title={project.title} />
               : (
-                <div className="aspect-video w-full rounded-2xl border border-white/8 bg-linear-to-br from-[#c8ff00]/8 via-white/2 to-transparent flex items-center justify-center">
-                  <span className="text-white/10 text-sm font-mono">screenshot</span>
+                <div className="aspect-video w-full rounded-2xl border border-black/8 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/8 via-black/2 dark:via-white/2 to-transparent flex items-center justify-center">
+                  <span className="text-black/10 dark:text-white/10 text-sm font-mono">screenshot</span>
                 </div>
               )
             }
@@ -129,7 +130,7 @@ export default function ProjectDetail() {
             className="mb-20"
           >
             <p className="text-xs font-mono tracking-[0.3em] uppercase text-gray-600 mb-6">Descripción</p>
-            <p className="text-gray-300 text-xl leading-relaxed">{project.overview}</p>
+            <p className="text-gray-700 dark:text-gray-300 text-xl leading-relaxed">{project.overview}</p>
           </motion.section>
 
           {/* Stack agrupado */}
@@ -150,19 +151,19 @@ export default function ProjectDetail() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.45, delay: i * 0.07 }}
-                    className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-8 p-6 rounded-xl border border-white/8"
+                    className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-8 p-6 rounded-xl border border-black/8 dark:border-white/8"
                   >
                     <div>
-                      <p className="text-white font-semibold text-sm mb-3">{sg.group}</p>
+                      <p className="text-gray-900 dark:text-white font-semibold text-sm mb-3">{sg.group}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {sg.items.map(item => (
-                          <span key={item} className="text-xs px-2.5 py-1 rounded-md border border-white/10 text-gray-400">
+                          <span key={item} className="text-xs px-2.5 py-1 rounded-md border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400">
                             {item}
                           </span>
                         ))}
                       </div>
                     </div>
-                    <p className="text-gray-400 text-sm leading-relaxed">{sg.description}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{sg.description}</p>
                   </motion.div>
                 ))}
               </div>
@@ -185,13 +186,13 @@ export default function ProjectDetail() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="p-6 rounded-xl border border-white/8 hover:border-[#c8ff00]/20 transition-colors"
+                  className="p-6 rounded-xl border border-black/8 dark:border-white/8 hover:border-(--accent-ink) transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: 'var(--accent)' }} />
-                    <h3 className="text-white font-semibold text-sm">{h.title}</h3>
+                    <h3 className="text-gray-900 dark:text-white font-semibold text-sm">{h.title}</h3>
                   </div>
-                  <p className="text-gray-400 text-sm leading-relaxed pl-4.5">{h.description}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed pl-4.5">{h.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -204,17 +205,17 @@ export default function ProjectDetail() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="mt-16 mb-0 p-8 rounded-2xl border border-white/8 bg-linear-to-br from-[#c8ff00]/4 via-transparent to-transparent"
+              className="mt-16 mb-0 p-8 rounded-2xl border border-black/8 dark:border-white/8 bg-linear-to-br from-[#c8ff00]/4 via-transparent to-transparent"
             >
-              <p className="text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--accent)' }}>Visión</p>
-              <p className="text-gray-300 text-lg leading-relaxed">{project.vision}</p>
+              <p className="text-xs font-mono tracking-[0.3em] uppercase mb-4" style={{ color: 'var(--accent-ink)' }}>Visión</p>
+              <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">{project.vision}</p>
             </motion.section>
           )}
 
           {/* Navegación prev / next */}
-          <div className="mt-24 pt-10 border-t border-white/5 flex justify-between gap-4">
+          <div className="mt-24 pt-10 border-t border-black/5 dark:border-white/5 flex justify-between gap-4">
             {prev ? (
-              <Link to={`/project/${prev.slug}`} className="group flex items-center gap-3 text-sm text-gray-500 hover:text-white transition-colors">
+              <Link to={`/project/${prev.slug}`} className="group flex items-center gap-3 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform">
                   <path d="m15 18-6-6 6-6" />
                 </svg>
@@ -223,7 +224,7 @@ export default function ProjectDetail() {
             ) : <div />}
 
             {next ? (
-              <Link to={`/project/${next.slug}`} className="group flex items-center gap-3 text-sm text-gray-500 hover:text-white transition-colors">
+              <Link to={`/project/${next.slug}`} className="group flex items-center gap-3 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
                 <span>{next.title}</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
                   <path d="m9 18 6-6-6-6" />
@@ -239,6 +240,7 @@ export default function ProjectDetail() {
 }
 
 function Carousel({ slides, title }: { slides: { src: string; caption: string }[]; title: string }) {
+  const { isDark } = useTheme()
   const [current, setCurrent]     = useState(0)
   const [direction, setDirection] = useState(1)
   const [lightbox, setLightbox]   = useState(false)
@@ -285,7 +287,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
 
   return (
     <>
-      <div className="rounded-2xl border border-white/8 overflow-hidden bg-[#0d0d18] select-none">
+      <div className="rounded-2xl border border-black/8 dark:border-white/8 overflow-hidden bg-white dark:bg-[#0d0d18] select-none">
         {/* Imagen */}
         <div className="relative overflow-hidden cursor-zoom-in aspect-video" onClick={() => setLightbox(true)}>
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -317,7 +319,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.25 }}
-              className="text-gray-400 text-sm leading-relaxed"
+              className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed"
             >
               {slides[current].caption}
             </motion.p>
@@ -336,17 +338,17 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
                   style={{
                     width: i === current ? '20px' : '6px',
                     height: '6px',
-                    background: i === current ? 'var(--accent)' : 'rgba(255,255,255,0.2)',
+                    background: i === current ? 'var(--accent)' : isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
                   }}
                 />
               ))}
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono text-gray-600">{current + 1} / {total}</span>
-              <button onClick={() => go(-1)} className="w-7 h-7 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-colors">
+              <button onClick={() => go(-1)} className="w-7 h-7 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-black/30 dark:hover:border-white/30 transition-colors">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6" /></svg>
               </button>
-              <button onClick={() => go(1)} className="w-7 h-7 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-colors">
+              <button onClick={() => go(1)} className="w-7 h-7 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-black/30 dark:hover:border-white/30 transition-colors">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6" /></svg>
               </button>
             </div>
@@ -373,7 +375,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.93, opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative bg-[#080810] ${isFullscreen ? 'w-screen h-screen flex flex-col justify-center px-6' : 'max-w-6xl w-full'}`}
+              className={`relative bg-white dark:bg-[#080810] ${isFullscreen ? 'w-screen h-screen flex flex-col justify-center px-6' : 'max-w-6xl w-full'}`}
               onClick={e => e.stopPropagation()}
             >
               <div className="relative overflow-hidden rounded-xl">
@@ -407,7 +409,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -4 }}
                         transition={{ duration: 0.2 }}
-                        className="text-gray-400 text-sm leading-relaxed text-center"
+                        className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed text-center"
                       >
                         {slides[current].caption}
                       </motion.p>
@@ -424,27 +426,27 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
                           style={{
                             width: i === current ? '20px' : '6px',
                             height: '6px',
-                            background: i === current ? 'var(--accent)' : 'rgba(255,255,255,0.25)',
+                            background: i === current ? 'var(--accent)' : isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.25)',
                           }}
                         />
                       ))}
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-mono text-gray-500">{current + 1} / {total}</span>
-                      <button onClick={() => go(-1)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
+                      <button onClick={() => go(-1)} className="w-8 h-8 rounded-full border border-black/15 dark:border-white/15 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6" /></svg>
                       </button>
-                      <button onClick={() => go(1)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
+                      <button onClick={() => go(1)} className="w-8 h-8 rounded-full border border-black/15 dark:border-white/15 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6" /></svg>
                       </button>
                       <button
                         onClick={toggleFullscreen}
                         aria-label="Pantalla completa"
-                        className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+                        className="w-8 h-8 rounded-full border border-black/15 dark:border-white/15 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
                       >
                         <ExpandIcon />
                       </button>
-                      <button onClick={() => setLightbox(false)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                      <button onClick={() => setLightbox(false)} className="w-8 h-8 rounded-full border border-black/15 dark:border-white/15 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                       </button>
                     </div>

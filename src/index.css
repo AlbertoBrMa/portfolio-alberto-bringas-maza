@@ -1,8 +1,22 @@
 @import "tailwindcss";
 
+/* Activa las clases dark: por presencia de la clase .dark en <html> (no por
+   prefers-color-scheme), para poder controlarlo con un toggle manual. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --accent: #c8ff00;
+  /* Versión del acento pensada para texto: en oscuro es igual al acento, en
+     claro el lima puro no tiene contraste suficiente sobre blanco. */
+  --accent-ink: #c8ff00;
   --bg: #080810;
+  --cursor-hover: #ffffff;
+}
+
+:root:not(.dark) {
+  --bg: #f4f4f1;
+  --accent-ink: #4d6600;
+  --cursor-hover: #0a0a0f;
 }
 
 html {
