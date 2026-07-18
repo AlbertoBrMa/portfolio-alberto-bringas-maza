@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -7,6 +7,7 @@ import Background from '../components/Background'
 import Navbar from '../components/Navbar'
 import Cursor from '../components/Cursor'
 import ScrollProgress from '../components/ScrollProgress'
+import { useFullscreen } from '../lib/useFullscreen'
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -242,11 +243,18 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
   const [direction, setDirection] = useState(1)
   const [lightbox, setLightbox]   = useState(false)
   const total = slides.length
+  const lightboxRef = useRef<HTMLDivElement>(null)
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(lightboxRef)
 
   const go = useCallback((dir: number) => {
     setDirection(dir)
     setCurrent(i => (i + dir + total) % total)
   }, [total])
+
+  useEffect(() => {
+    if (lightbox || document.fullscreenElement !== lightboxRef.current) return
+    document.exitFullscreen().catch(() => {})
+  }, [lightbox])
 
   useEffect(() => {
     if (!lightbox) return
@@ -360,11 +368,12 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
           >
             <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
             <motion.div
+              ref={lightboxRef}
               initial={{ scale: 0.93, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.93, opacity: 0 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-              className="relative max-w-6xl w-full"
+              className={`relative bg-[#080810] ${isFullscreen ? 'w-screen h-screen flex flex-col justify-center px-6' : 'max-w-6xl w-full'}`}
               onClick={e => e.stopPropagation()}
             >
               <div className="relative overflow-hidden rounded-xl">
@@ -379,7 +388,7 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="w-full max-h-[72vh] object-contain"
+                    className={`w-full object-contain ${isFullscreen ? 'max-h-[80dvh]' : 'max-h-[72dvh]'}`}
                     draggable={false}
                   />
                 </AnimatePresence>
@@ -424,6 +433,13 @@ function Carousel({ slides, title }: { slides: { src: string; caption: string }[
                   <button onClick={() => go(1)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6" /></svg>
                   </button>
+                  <button
+                    onClick={toggleFullscreen}
+                    aria-label={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+                    className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+                  >
+                    {isFullscreen ? <CompressIcon /> : <ExpandIcon />}
+                  </button>
                   <button onClick={() => setLightbox(false)} className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                   </button>
@@ -453,6 +469,22 @@ function ExternalIcon() {
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
       <polyline points="15 3 21 3 21 9" />
       <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  )
+}
+
+function ExpandIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3" />
+    </svg>
+  )
+}
+
+function CompressIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 3v3a2 2 0 0 1-2 2H4M15 3v3a2 2 0 0 0 2 2h3M4 16h3a2 2 0 0 1 2 2v3M20 16h-3a2 2 0 0 0-2 2v3" />
     </svg>
   )
 }

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { profile } from '../data/profile'
 import type { ContactLink } from '../data/profile'
+import { useFullscreen } from '../lib/useFullscreen'
 
 const icons: Record<ContactLink['type'], React.ReactNode> = {
   email: (
@@ -34,6 +35,13 @@ const item = {
 
 export default function Contact() {
   const [cvOpen, setCvOpen] = useState(false)
+  const cvModalRef = useRef<HTMLDivElement>(null)
+  const { isFullscreen: cvFullscreen, toggle: toggleCvFullscreen } = useFullscreen(cvModalRef)
+
+  useEffect(() => {
+    if (cvOpen || document.fullscreenElement !== cvModalRef.current) return
+    document.exitFullscreen().catch(() => {})
+  }, [cvOpen])
 
   useEffect(() => {
     if (!cvOpen) return
@@ -172,12 +180,13 @@ export default function Contact() {
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
             <motion.div
+              ref={cvModalRef}
               initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-3xl flex flex-col rounded-2xl border border-white/10 overflow-hidden bg-[#0d0d18]"
-              style={{ height: 'min(85vh, 900px)' }}
+              className={`relative flex flex-col border border-white/10 overflow-hidden bg-[#0d0d18] ${cvFullscreen ? 'w-screen h-screen rounded-none' : 'w-full max-w-3xl rounded-2xl'}`}
+              style={cvFullscreen ? undefined : { height: 'min(85dvh, 900px)' }}
               onClick={e => e.stopPropagation()}
             >
               {/* Header */}
@@ -197,6 +206,13 @@ export default function Contact() {
                     </svg>
                     Descargar
                   </a>
+                  <button
+                    onClick={toggleCvFullscreen}
+                    aria-label={cvFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+                    className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-white hover:bg-white/8 transition-colors"
+                  >
+                    {cvFullscreen ? <CompressIcon /> : <ExpandIcon />}
+                  </button>
                   <button
                     onClick={() => setCvOpen(false)}
                     className="w-7 h-7 flex items-center justify-center rounded-full text-gray-500 hover:text-white hover:bg-white/8 transition-colors"
@@ -221,5 +237,21 @@ export default function Contact() {
         document.body
       )}
     </footer>
+  )
+}
+
+function ExpandIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3" />
+    </svg>
+  )
+}
+
+function CompressIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 3v3a2 2 0 0 1-2 2H4M15 3v3a2 2 0 0 0 2 2h3M4 16h3a2 2 0 0 1 2 2v3M20 16h-3a2 2 0 0 0-2 2v3" />
+    </svg>
   )
 }
