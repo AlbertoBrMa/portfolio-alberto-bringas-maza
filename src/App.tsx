@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
 import Background     from './components/Background'
 import Cursor         from './components/Cursor'
+import ClickRipple    from './components/ClickRipple'
 import ScrollProgress from './components/ScrollProgress'
 import Navbar         from './components/Navbar'
 import Hero           from './components/Hero'
@@ -46,10 +47,13 @@ function Home() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/project/:slug" element={<ProjectDetail />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <ClickRipple />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:slug" element={<ProjectDetail />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   )
 }
