@@ -1,25 +1,38 @@
 type LogoProps = {
   accent?: string
+  accentDark?: string
   foreground?: string
   className?: string
 }
 
 // Trazado a mano en Figma calcando la referencia — ver conversación para el
 // diseño original. viewBox y coordenadas de paths son las exportadas tal cual.
-export default function Logo({ accent = '#3B82F6', foreground = '#FFFFFF', className }: LogoProps) {
+export default function Logo({
+  accent = '#c8ff00',
+  accentDark = '#4d6600',
+  foreground = '#FFFFFF',
+  className,
+}: LogoProps) {
   return (
     <svg viewBox="0 0 905 297" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} role="img" aria-label=".ABM logo">
-      <ellipse id="dot" cx="24" cy="271.981" rx="24" ry="25" fill={accent} />
+      <defs>
+        <linearGradient id="logoAccent" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={accent} />
+          <stop offset="100%" stopColor={accentDark} />
+        </linearGradient>
+      </defs>
+
+      <ellipse id="dot" cx="24" cy="271.981" rx="24" ry="25" fill="url(#logoAccent)" />
 
       <path
         id="letterA"
-        fill={accent}
+        fill="url(#logoAccent)"
         d="M66 295.981L241 0.981049L415.5 295.981H364L241 89.981L118.099 295.981H66Z"
       />
 
       <path
         id="code"
-        fill={accent}
+        fill="url(#logoAccent)"
         d="
           M216 223.981V233.981L187 247.481L216 261.981V270.981L177 252.981V242.981L216 223.981Z
           M223 284.981L249 209.981H258L232 284.981H223Z
@@ -35,7 +48,7 @@ export default function Logo({ accent = '#3B82F6', foreground = '#FFFFFF', class
 
       <path
         id="letterM"
-        fill={accent}
+        fill="url(#logoAccent)"
         d="M634 15.981V82.981L769 219.981L857 131.981V295.981H904V15.981L769 150.981L634 15.981Z"
       />
     </svg>

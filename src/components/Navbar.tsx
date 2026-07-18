@@ -67,7 +67,7 @@ export default function Navbar() {
           aria-label="Inicio"
           className="hover:opacity-80 transition-opacity"
         >
-          <Logo className="h-9 w-auto" />
+          <Logo className="h-7 w-auto" />
         </button>
 
         <nav className="flex items-center gap-8">
