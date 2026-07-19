@@ -53,7 +53,7 @@ export default function Hero() {
       ref={heroRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative h-screen flex items-center"
+      className="relative min-h-screen pt-28 pb-10 flex items-center"
       style={{ zIndex: 1 }}
     >
       <div className="max-w-6xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
