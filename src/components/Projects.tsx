@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, AnimatePresence, useMotionValue, useMotionTemplate, useSpring, useTransform } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { projects, type Project } from '../data/projects'
@@ -136,9 +136,9 @@ function ProjectCard({ project, index, lang, t, onOpen }: {
   t: (key: TKey) => string
   onOpen: () => void
 }) {
-  const canTilt = useRef(
-    typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches,
-  ).current
+  const [canTilt] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+  )
 
   const px = useMotionValue(0.5)
   const py = useMotionValue(0.5)
