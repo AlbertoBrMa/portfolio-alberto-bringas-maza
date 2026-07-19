@@ -12,17 +12,17 @@ export default function Background() {
       <div className="absolute inset-0 bg-[#fafafa] dark:bg-[#080810]" />
       <motion.div style={{ y: y1 }} className="absolute inset-0 pointer-events-none">
         <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }}
+          animate={{ opacity: [0.85, 1, 0.85] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute top-[15%] left-[10%]  w-[700px] h-[700px] rounded-full bg-[#10b981]/3 dark:bg-[#10b981]/6  blur-[160px]"
         />
         <motion.div
-          animate={{ scale: [1, 1.05, 1], opacity: [0.85, 1, 0.85] }}
+          animate={{ opacity: [0.85, 1, 0.85] }}
           transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
           className="absolute top-[60%] right-[8%]  w-[550px] h-[550px] rounded-full bg-black/5 dark:bg-white/4      blur-[130px]"
         />
         <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }}
+          animate={{ opacity: [0.85, 1, 0.85] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
           className="absolute top-[40%] left-[50%]  w-[400px] h-[400px] rounded-full bg-[#10b981]/3 dark:bg-[#10b981]/4  blur-[100px]"
         />
