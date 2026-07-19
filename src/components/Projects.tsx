@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
+import { useMemo, useRef, useState } from 'react'
+import { motion, AnimatePresence, useMotionValue, useMotionTemplate, useSpring, useTransform } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { projects } from '../data/projects'
-import { useTheme } from '../lib/useTheme'
-import { useLanguage, loc } from '../lib/useLanguage'
-import { useT } from '../lib/translations'
+import { projects, type Project } from '../data/projects'
+import { useLanguage, loc, type Lang } from '../lib/useLanguage'
+import { useT, type TKey } from '../lib/translations'
 import { GithubIcon, ExternalIcon, WipBadge } from './icons'
 
 const fadeUp = {
@@ -16,67 +15,30 @@ const fadeUp = {
   }),
 }
 
-const VISIBLE_RADIUS = 2
+const MAX_CARD_TAGS = 3
 
-function circularOffset(index: number, active: number, total: number) {
-  let diff = index - active
-  const half = total / 2
-  if (diff > half) diff -= total
-  if (diff < -half) diff += total
-  return diff
-}
-
-function useCarouselMetrics() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [containerWidth, setContainerWidth] = useState(0)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const ro = new ResizeObserver(([entry]) => setContainerWidth(entry.contentRect.width))
-    ro.observe(el)
-    setContainerWidth(el.getBoundingClientRect().width)
-    return () => ro.disconnect()
+function useTagList() {
+  return useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const project of projects) {
+      for (const tag of project.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1)
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([tag]) => tag)
   }, [])
-
-  const cardWidth = Math.min(480, Math.max(230, containerWidth * 0.38))
-  const spacing = cardWidth * 0.72
-  const height = Math.round((cardWidth * 9) / 16) + 90
-
-  return { ref, cardWidth, spacing, height }
 }
 
 export default function Projects() {
-  const { isDark } = useTheme()
   const { lang } = useLanguage()
   const t = useT()
-  const [active, setActive] = useState(0)
   const navigate = useNavigate()
-  const total = projects.length
-  const activeProject = projects[active]
-  const { ref: carouselRef, cardWidth, spacing, height } = useCarouselMetrics()
+  const tags = useTagList()
+  const [activeTag, setActiveTag] = useState<string | null>(null)
 
-  const goTo = useCallback((i: number) => setActive(((i % total) + total) % total), [total])
-  const next = useCallback(() => goTo(active + 1), [active, goTo])
-  const prev = useCallback(() => goTo(active - 1), [active, goTo])
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') next()
-      if (e.key === 'ArrowLeft') prev()
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [next, prev])
+  const visibleProjects = activeTag ? projects.filter(p => p.tags.includes(activeTag)) : projects
 
   const openProject = (slug: string) => {
     sessionStorage.setItem('homeScroll', String(window.scrollY))
     navigate(`/project/${slug}`)
-  }
-
-  const onDragEnd = (_: unknown, info: PanInfo) => {
-    if (info.offset.x < -60) next()
-    else if (info.offset.x > 60) prev()
   }
 
   return (
@@ -95,119 +57,57 @@ export default function Projects() {
           {t('projectsEyebrow')}
         </motion.p>
 
-        <motion.div
-          ref={carouselRef}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          variants={fadeUp}
-          custom={0.1}
-          className="relative mb-10 select-none"
-          style={{ perspective: 1400, height }}
-        >
-          <button
-            onClick={prev}
-            aria-label={t('projectsPrev')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors flex items-center justify-center"
-          >
-            ‹
-          </button>
-          <button
-            onClick={next}
-            aria-label={t('projectsNext')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors flex items-center justify-center"
-          >
-            ›
-          </button>
-
+        {tags.length > 1 && (
           <motion.div
-            className="absolute inset-0 cursor-grab active:cursor-grabbing"
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
-            onDragEnd={onDragEnd}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={0.05}
+            className="flex flex-wrap gap-2 mb-10"
           >
-            {projects.map((project, i) => {
-              const offset = circularOffset(i, active, total)
-              if (Math.abs(offset) > VISIBLE_RADIUS) return null
-              const isActive = offset === 0
-
-              return (
-                <motion.article
-                  key={project.slug}
-                  className="absolute left-1/2 top-1/2 rounded-2xl border overflow-hidden"
-                  style={{
-                    width: cardWidth,
-                    borderColor: isActive
-                      ? 'rgba(16,185,129,0.4)'
-                      : isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-                  }}
-                  animate={{
-                    x: `calc(-50% + ${offset * spacing}px)`,
-                    y: '-50%',
-                    scale: 1 - Math.abs(offset) * 0.16,
-                    rotateY: offset * -22,
-                    opacity: 1 - Math.abs(offset) * 0.32,
-                    zIndex: 10 - Math.abs(offset),
-                  }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 30 }}
-                  onClick={() => (isActive ? openProject(project.slug) : goTo(i))}
-                  role="button"
-                  tabIndex={isActive ? 0 : -1}
-                  aria-label={`${isActive ? t('projectsOpenAria') : t('projectsShowAria')} ${loc(project.title, project.title_en, lang)}`}
-                >
-                  <div className="relative aspect-video bg-linear-to-br from-[#10b981]/8 via-black/3 dark:via-white/3 to-transparent flex items-center justify-center pointer-events-none">
-                    {project.preview
-                      ? <img src={project.preview} alt={loc(project.title, project.title_en, lang)} className="w-full h-full object-cover" draggable={false} />
-                      : <span className="text-black/10 dark:text-white/10 text-sm font-mono">preview</span>
-                    }
-                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent pt-12 pb-4 px-5">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-white font-semibold text-base truncate">{loc(project.title, project.title_en, lang)}</h3>
-                        {project.wip && <WipBadge size="xs" />}
-                      </div>
-                    </div>
-                  </div>
-                </motion.article>
-              )
-            })}
-          </motion.div>
-        </motion.div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeProject.slug}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -14 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-2xl mx-auto text-center"
-          >
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{loc(activeProject.title, activeProject.title_en, lang)}</h3>
-              {activeProject.wip && <WipBadge label={t('projectsWip')} />}
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-7 text-base">{loc(activeProject.description, activeProject.description_en, lang)}</p>
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-              {activeProject.tags.map(tag => (
-                <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="flex gap-6 flex-wrap justify-center items-center">
-              <ProjectLink href={activeProject.github} type="github" />
-              <ProjectLink href={activeProject.live} type="live" />
+            <button
+              onClick={() => setActiveTag(null)}
+              className={
+                activeTag === null
+                  ? 'text-xs px-3 py-1.5 rounded-full border border-transparent font-semibold text-black transition-colors'
+                  : 'text-xs px-3 py-1.5 rounded-full border border-black/12 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors'
+              }
+              style={activeTag === null ? { background: 'var(--accent)' } : undefined}
+            >
+              {t('projectsFilterAll')}
+            </button>
+            {tags.map(tag => (
               <button
-                onClick={() => openProject(activeProject.slug)}
-                className="text-sm font-semibold px-6 py-2.5 rounded-full text-black hover:scale-105 active:scale-95 transition-transform"
-                style={{ background: 'var(--accent)' }}
+                key={tag}
+                onClick={() => setActiveTag(cur => (cur === tag ? null : tag))}
+                className={
+                  activeTag === tag
+                    ? 'text-xs px-3 py-1.5 rounded-full border border-transparent font-semibold text-black transition-colors'
+                    : 'text-xs px-3 py-1.5 rounded-full border border-black/12 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:border-(--accent-ink) hover:text-(--accent-ink) transition-colors'
+                }
+                style={activeTag === tag ? { background: 'var(--accent)' } : undefined}
               >
-                {t('projectsCta')}
+                {tag}
               </button>
-            </div>
+            ))}
           </motion.div>
-        </AnimatePresence>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <AnimatePresence mode="popLayout">
+            {visibleProjects.map((project, i) => (
+              <ProjectCard
+                key={project.slug}
+                project={project}
+                index={i}
+                lang={lang}
+                t={t}
+                onOpen={() => openProject(project.slug)}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
 
       </div>
     </section>
@@ -222,14 +122,109 @@ function ProjectLink({ href, type }: { href: string; type: 'github' | 'live' }) 
       target="_blank"
       rel="noopener noreferrer"
       onClick={e => e.stopPropagation()}
-      className={`flex items-center gap-2 text-sm transition-colors ${
-        type === 'live'
-          ? 'text-(--accent-ink) hover:text-gray-900 dark:hover:text-white'
-          : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-      }`}
+      className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
     >
       {type === 'github' ? <GithubIcon /> : <ExternalIcon />}
-      {type === 'github' ? 'GitHub' : 'Live'}
     </a>
+  )
+}
+
+function ProjectCard({ project, index, lang, t, onOpen }: {
+  project: Project
+  index: number
+  lang: Lang
+  t: (key: TKey) => string
+  onOpen: () => void
+}) {
+  const canTilt = useRef(
+    typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+  ).current
+
+  const px = useMotionValue(0.5)
+  const py = useMotionValue(0.5)
+  const rotateX = useSpring(useTransform(py, [0, 1], [7, -7]), { stiffness: 300, damping: 22 })
+  const rotateY = useSpring(useTransform(px, [0, 1], [-7, 7]), { stiffness: 300, damping: 22 })
+  const glareX = useTransform(px, v => `${v * 100}%`)
+  const glareY = useTransform(py, v => `${v * 100}%`)
+  const glare = useMotionTemplate`radial-gradient(circle at ${glareX} ${glareY}, rgba(16,185,129,0.16), transparent 60%)`
+
+  function onMouseMove(e: React.MouseEvent<HTMLElement>) {
+    if (!canTilt) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    px.set((e.clientX - rect.left) / rect.width)
+    py.set((e.clientY - rect.top) / rect.height)
+  }
+
+  function onMouseLeave() {
+    px.set(0.5)
+    py.set(0.5)
+  }
+
+  return (
+    <motion.article
+      layout
+      initial="hidden"
+      whileInView="visible"
+      exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
+      viewport={{ once: true, margin: '-40px' }}
+      variants={fadeUp}
+      custom={0.1 + Math.min(index, 6) * 0.06}
+      whileHover={canTilt ? { scale: 1.02 } : undefined}
+      whileTap={{ scale: 0.98 }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      onClick={onOpen}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => { if (e.key === 'Enter') onOpen() }}
+      style={{ rotateX, rotateY, transformPerspective: 800 }}
+      className="group relative rounded-2xl border border-black/12 dark:border-white/8 hover:border-(--accent-ink) transition-colors overflow-hidden cursor-pointer bg-white dark:bg-[#0d0d18] flex flex-col"
+    >
+      {canTilt && (
+        <motion.div aria-hidden className="absolute inset-0 pointer-events-none z-10" style={{ background: glare }} />
+      )}
+
+      <div className="relative aspect-video bg-linear-to-br from-[#10b981]/8 via-black/3 dark:via-white/3 to-transparent flex items-center justify-center">
+        {project.preview
+          ? <img src={project.preview} alt={loc(project.title, project.title_en, lang)} className="w-full h-full object-cover" draggable={false} />
+          : <span className="text-black/10 dark:text-white/10 text-sm font-mono">preview</span>
+        }
+        <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 to-transparent pt-12 pb-4 px-5">
+          <div className="flex items-center gap-2">
+            <h3 className="text-white font-semibold text-base truncate">{loc(project.title, project.title_en, lang)}</h3>
+            {project.wip && <WipBadge size="xs" />}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-5 flex flex-col flex-1">
+        <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-4">
+          {loc(project.description, project.description_en, lang)}
+        </p>
+
+        <div className="flex flex-wrap gap-1.5 mb-5">
+          {project.tags.slice(0, MAX_CARD_TAGS).map(tag => (
+            <span key={tag} className="text-xs px-2.5 py-1 rounded-md border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400">
+              {tag}
+            </span>
+          ))}
+          {project.tags.length > MAX_CARD_TAGS && (
+            <span className="text-xs px-2.5 py-1 rounded-md border border-black/10 dark:border-white/10 text-gray-500">
+              +{project.tags.length - MAX_CARD_TAGS}
+            </span>
+          )}
+        </div>
+
+        <div className="mt-auto flex items-center justify-between">
+          <div className="flex gap-4">
+            <ProjectLink href={project.github} type="github" />
+            <ProjectLink href={project.live} type="live" />
+          </div>
+          <span className="text-xs font-semibold text-(--accent-ink) group-hover:translate-x-0.5 transition-transform">
+            {t('projectsCta')}
+          </span>
+        </div>
+      </div>
+    </motion.article>
   )
 }

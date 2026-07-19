@@ -18,10 +18,7 @@ const dict = {
   aboutLanguages: { es: 'Idiomas', en: 'Languages' },
 
   projectsEyebrow: { es: '02 — Proyectos', en: '02 — Projects' },
-  projectsPrev: { es: 'Proyecto anterior', en: 'Previous project' },
-  projectsNext: { es: 'Siguiente proyecto', en: 'Next project' },
-  projectsOpenAria: { es: 'Abrir', en: 'Open' },
-  projectsShowAria: { es: 'Mostrar', en: 'Show' },
+  projectsFilterAll: { es: 'Todos', en: 'All' },
   projectsCta: { es: 'Ver proyecto →', en: 'View project →' },
   projectsWip: { es: 'En desarrollo', en: 'Work in progress' },
 
