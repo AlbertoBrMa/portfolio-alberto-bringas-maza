@@ -50,7 +50,7 @@ export default function CvModal({ open, onClose, cvUrl, downloadName, title }: P
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative flex flex-col border border-black/10 dark:border-white/10 overflow-hidden bg-white dark:bg-[#0d0d18] ${isFullscreen ? 'w-screen h-screen rounded-none' : 'w-full max-w-3xl rounded-2xl'}`}
+            className={`relative flex flex-col border border-black/10 dark:border-white/10 overflow-hidden bg-white dark:bg-[#0d0d18] ${isFullscreen ? 'fixed inset-0 rounded-none' : 'w-full max-w-3xl rounded-2xl'}`}
             style={isFullscreen ? undefined : { height: 'min(85dvh, 900px)' }}
             onClick={e => e.stopPropagation()}
           >
