@@ -18,8 +18,9 @@ export function useFullscreen(ref: RefObject<HTMLElement | null>) {
   }, [ref])
 
   useEffect(() => {
+    const node = ref.current
     return () => {
-      if (document.fullscreenElement === ref.current) document.exitFullscreen().catch(() => {})
+      if (document.fullscreenElement === node) document.exitFullscreen().catch(() => {})
     }
   }, [ref])
 

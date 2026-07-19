@@ -9,6 +9,7 @@ import { useT } from '../lib/translations'
 export default function Navbar() {
   const [scrolled,    setScrolled]    = useState(false)
   const [mobileOpen,  setMobileOpen]  = useState(false)
+  const [prevPathname, setPrevPathname] = useState<string | null>(null)
   const navigate  = useNavigate()
   const location  = useLocation()
   const t = useT()
@@ -18,13 +19,16 @@ export default function Navbar() {
     { label: t('navProjects'), hash: 'projects' },
   ]
 
+  if (location.pathname !== prevPathname) {
+    setPrevPathname(location.pathname)
+    if (prevPathname !== null) setMobileOpen(false)
+  }
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
