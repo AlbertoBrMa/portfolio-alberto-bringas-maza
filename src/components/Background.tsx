@@ -1,7 +1,11 @@
+import { useState } from 'react'
 import { useScroll, useTransform, motion } from 'framer-motion'
 
 export default function Background() {
   const { scrollYProgress } = useScroll()
+  const [canParallaxBlur] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+  )
 
   const y1 = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
   const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '-42%'])
@@ -10,7 +14,7 @@ export default function Background() {
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ zIndex: 0 }}>
       <div className="absolute inset-0 bg-[#fafafa] dark:bg-[#080810]" />
-      <motion.div style={{ y: y1 }} className="absolute inset-0 pointer-events-none">
+      <motion.div style={{ y: canParallaxBlur ? y1 : 0 }} className="absolute inset-0 pointer-events-none">
         <motion.div
           animate={{ opacity: [0.85, 1, 0.85] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
