@@ -11,6 +11,11 @@
   --accent-ink: #10b981;
   --bg: #080810;
   --cursor-hover: #ffffff;
+  /* Le dice al navegador qué color usar en el chrome nativo (rebote elástico
+     de iOS al hacer overscroll, scrollbars, controles de formulario) según
+     el tema del SITIO, no el del sistema — si no, esas zonas usan la
+     preferencia del sistema y pueden no coincidir con el tema activo. */
+  color-scheme: dark;
 }
 
 :root:not(.dark) {
@@ -21,11 +26,13 @@
      tener contraste suficiente como texto sobre fondo claro. */
   --accent-ink: #047857;
   --cursor-hover: #0a0a0f;
+  color-scheme: light;
 }
 
 html {
   font-family: 'Space Grotesk', system-ui, sans-serif;
   scroll-behavior: smooth;
+  background: var(--bg);
 }
 
 body {
